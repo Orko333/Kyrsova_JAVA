@@ -72,7 +72,7 @@ class AccessoryTest {
     void constructorWithNegativePriceThrowsException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new Accessory(name, -1.0, description, imagePath, stockQuantity, type, color, size));
-        assertEquals("Ціна аксесуара не може бути від'ємною", exception.getMessage());
+        assertEquals("Ціна не може бути від'ємною", exception.getMessage());
     }
 
     @Test
@@ -104,7 +104,7 @@ class AccessoryTest {
     void setPriceWithNegativeValueThrowsException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> accessory.setPrice(-1.0));
-        assertEquals("Ціна аксесуара не може бути від'ємною", exception.getMessage());
+        assertEquals("Ціна не може бути від'ємною", exception.getMessage());
     }
 
     @Test
@@ -151,7 +151,7 @@ class AccessoryTest {
     void decreaseStockWithInsufficientStockThrowsException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> accessory.decreaseStock(15));
-        assertEquals("Недостатня кількість аксесуарів на складі", exception.getMessage());
+        assertEquals("Недостатньо аксесуарів на складі", exception.getMessage());
     }
 
     @Test

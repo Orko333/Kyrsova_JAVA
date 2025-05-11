@@ -377,7 +377,7 @@ public class BouquetDAO {
      * @return об'єкт Bouquet
      * @throws SQLException якщо виникає помилка при роботі з ResultSet
      */
-    private Bouquet mapRowToBouquet(ResultSet rs) throws SQLException {
+    Bouquet mapRowToBouquet(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String name = rs.getString("name");
         String description = rs.getString("description");

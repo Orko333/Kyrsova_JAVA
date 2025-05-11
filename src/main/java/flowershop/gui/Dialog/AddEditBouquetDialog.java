@@ -3,8 +3,6 @@ package flowershop.gui.Dialog;
 import flowershop.models.Bouquet;
 import flowershop.models.Flower;
 import flowershop.models.Accessory;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -21,190 +19,176 @@ import javax.swing.event.DocumentListener;
 
 /**
  * Діалогове вікно для додавання або редагування букета.
- * Дозволяє вводити та редагувати назву, опис, знижку, зображення, а також вибирати квіти та аксесуари для букета.
+ * Успадковує функціонал від AbstractAddEditDialog.
  */
 public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
 
-    private static final Logger logger = LogManager.getLogger(AddEditBouquetDialog.class);
-
+    // Поля форми, специфічні для букета
     private JTextField nameField;
     private JTextArea descriptionArea;
     private JSpinner discountSpinner;
+    // imagePathField, browseButton, okButton, cancelButton, previewImageLabel - успадковані
+
+    // Списки для вибору квітів та аксесуарів
     private JList<Flower> availableFlowersList;
     private JList<Accessory> availableAccessoriesList;
-    private JList<String> selectedFlowersDisplayList;
+    private JList<String> selectedFlowersDisplayList; // Для відображення квітів з кількістю
     private JList<Accessory> selectedAccessoriesDisplayList;
-    private JButton addFlowerButton, removeFlowerButton, addAccessoryButton, removeAccessoryButton;
-    private JSpinner flowerQuantitySpinner;
-    private final List<Flower> availableFlowersSource;
-    private final List<Accessory> availableAccessoriesSource;
-    private final DefaultListModel<Flower> selectedFlowersModel;
-    private final DefaultListModel<String> selectedFlowersDisplayModel;
-    private final DefaultListModel<Accessory> selectedAccessoriesModel;
-    private final Map<Flower, Integer> currentFlowerQuantities;
 
-    /**
-     * Конструктор діалогового вікна.
-     *
-     * @param parent                 батьківське вікно
-     * @param bouquetToEdit          букет для редагування (null, якщо створюється новий)
-     * @param allAvailableFlowers    список доступних квітів
-     * @param allAvailableAccessories список доступних аксесуарів
-     */
+    // Кнопки для переміщення елементів
+    private JButton addFlowerButton, removeFlowerButton;
+    private JButton addAccessoryButton, removeAccessoryButton;
+    private JSpinner flowerQuantitySpinner; // Для вказівки кількості квітів
+
+    // Колекції для зберігання даних
+    private List<Flower> availableFlowersSource;
+    private List<Accessory> availableAccessoriesSource;
+    private DefaultListModel<Flower> selectedFlowersModel;
+    private DefaultListModel<String> selectedFlowersDisplayModel;
+    private DefaultListModel<Accessory> selectedAccessoriesModel;
+
+    // Для зберігання кількості кожної квітки в букеті
+    private Map<Flower, Integer> currentFlowerQuantities;
+
+
     public AddEditBouquetDialog(JFrame parent, Bouquet bouquetToEdit,
                                 List<Flower> allAvailableFlowers, List<Accessory> allAvailableAccessories) {
         super(parent, bouquetToEdit == null ? "Додати букет" : "Редагувати букет", bouquetToEdit);
+
+        // Ініціалізація джерел даних відбувається ПІСЛЯ super(),
+        // тому JList повинні бути оновлені після цього.
         this.availableFlowersSource = allAvailableFlowers != null ? new ArrayList<>(allAvailableFlowers) : new ArrayList<>();
         this.availableAccessoriesSource = allAvailableAccessories != null ? new ArrayList<>(allAvailableAccessories) : new ArrayList<>();
-        this.selectedFlowersModel = new DefaultListModel<>();
-        this.selectedFlowersDisplayModel = new DefaultListModel<>();
-        this.selectedAccessoriesModel = new DefaultListModel<>();
-        this.currentFlowerQuantities = new HashMap<>();
 
-        if (this.item != null) {
+        if (availableFlowersList != null) { // Перевірка, чи списки вже створені (малоймовірно на цьому етапі)
+            availableFlowersList.setListData(this.availableFlowersSource.toArray(new Flower[0]));
+        }
+        if (availableAccessoriesList != null) {
+            availableAccessoriesList.setListData(this.availableAccessoriesSource.toArray(new Accessory[0]));
+        }
+
+
+        if (this.item != null) { // item - це bouquetToEdit
             populateFields();
         }
         pack();
-        setMinimumSize(new Dimension(850, 750));
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize((int) (screenSize.width * 0.7), (int) (screenSize.height * 0.9));
+        setMinimumSize(new Dimension(850, 700));
         setLocationRelativeTo(parent);
         setResizable(true);
         SwingUtilities.invokeLater(() -> nameField.requestFocusInWindow());
-        logger.info("Діалогове вікно {} відкрито.", bouquetToEdit == null ? "додавання" : "редагування");
     }
 
-    // Формування UI
-
-    /**
-     * Створює панель форми для введення даних про букет.
-     *
-     * @return панель із компонентами форми
-     */
     @Override
     protected JPanel createFormPanel() {
+        // Ініціалізація моделей тут, перед їх використанням у createSelectedItemsSubPanel або populateFields
+        if (this.selectedFlowersModel == null) {
+            this.selectedFlowersModel = new DefaultListModel<>();
+        }
+        if (this.selectedFlowersDisplayModel == null) {
+            this.selectedFlowersDisplayModel = new DefaultListModel<>();
+        }
+        if (this.selectedAccessoriesModel == null) {
+            this.selectedAccessoriesModel = new DefaultListModel<>();
+        }
+        if (this.currentFlowerQuantities == null) {
+            this.currentFlowerQuantities = new HashMap<>();
+        }
+
         JPanel formPanel = new JPanel(new BorderLayout(10, 10));
         formPanel.setBackground(BACKGROUND_COLOR);
-
-        formPanel.add(createTopPanel(), BorderLayout.NORTH);
-        formPanel.add(createSelectionPanel(), BorderLayout.CENTER);
-
-        setupEnterNavigation(nameField, descriptionArea, discountSpinner);
-        return formPanel;
-    }
-
-    /**
-     * Створює верхню панель із основною інформацією про букет.
-     *
-     * @return верхня панель
-     */
-    private JPanel createTopPanel() {
+        // Спільна інформація про букет (назва, опис, знижка, зображення)
         JPanel topPanel = new JPanel(new GridBagLayout());
         topPanel.setOpaque(false);
         topPanel.setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createLineBorder(PRIMARY_COLOR),
                 "Основна інформація",
                 TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,
-                new Font("SansSerif", Font.BOLD, 14), PRIMARY_COLOR));
-
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.anchor = GridBagConstraints.WEST;
+                new Font("SansSerif", Font.BOLD, 14), PRIMARY_COLOR
+        ));
+        GridBagConstraints gbcTop = new GridBagConstraints();
+        gbcTop.insets = new Insets(5, 5, 5, 5);
+        gbcTop.anchor = GridBagConstraints.WEST;
 
         nameField = createStyledTextField(25);
-        addFormField(topPanel, "Назва букета:", nameField, gbc, 0, 1, GridBagConstraints.HORIZONTAL);
+        addFormField(topPanel, "Назва букета:", nameField, gbcTop, 0, 1, GridBagConstraints.HORIZONTAL);
 
         descriptionArea = createStyledTextArea(3, 25);
         JScrollPane descriptionScrollPane = new JScrollPane(descriptionArea);
         descriptionScrollPane.setBorder(FIELD_BORDER);
-        addFormField(topPanel, "Опис:", descriptionScrollPane, gbc, 1, 1, GridBagConstraints.BOTH);
-        gbc.weighty = 0.3;
+        addFormField(topPanel, "Опис:", descriptionScrollPane, gbcTop, 1, 1, GridBagConstraints.BOTH);
+        gbcTop.weighty = 0.3;
 
         discountSpinner = new JSpinner(new SpinnerNumberModel(0.0, 0.0, 100.0, 1.0));
         discountSpinner.setFont(DEFAULT_FONT);
         ((JSpinner.DefaultEditor) discountSpinner.getEditor()).getTextField().setColumns(5);
-        addFormField(topPanel, "Знижка (%):", discountSpinner, gbc, 2, 1, GridBagConstraints.NONE);
-        gbc.weighty = 0.0;
+        addFormField(topPanel, "Знижка (%):", discountSpinner, gbcTop, 2, 1, GridBagConstraints.NONE);
+        gbcTop.weighty = 0.0;
 
-        JPanel imageSelectionPanel = new JPanel(new BorderLayout(5, 0));
+        JPanel imageSelectionPanel = new JPanel(new BorderLayout(5,0));
         imageSelectionPanel.setOpaque(false);
         imagePathField = createStyledTextField(20);
         imagePathField.setEditable(false);
         imagePathField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                updatePreviewImage(imagePathField.getText());
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                updatePreviewImage(imagePathField.getText());
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                updatePreviewImage(imagePathField.getText());
-            }
+            public void insertUpdate(DocumentEvent e) { updatePreviewImage(imagePathField.getText()); }
+            public void removeUpdate(DocumentEvent e) { updatePreviewImage(imagePathField.getText()); }
+            public void changedUpdate(DocumentEvent e) { updatePreviewImage(imagePathField.getText()); }
         });
 
-        browseButton = createStyledButton("Огляд...", null);
+        browseButton = createStyledButton("Огляд...", "/icons/browse.png");
         browseButton.addActionListener(e -> browseImageAction());
         imageSelectionPanel.add(imagePathField, BorderLayout.CENTER);
         imageSelectionPanel.add(browseButton, BorderLayout.EAST);
-        addFormField(topPanel, "Зображення:", imageSelectionPanel, gbc, 3, 1, GridBagConstraints.HORIZONTAL);
+        addFormField(topPanel, "Зображення:", imageSelectionPanel, gbcTop, 3,1, GridBagConstraints.HORIZONTAL);
 
         previewImageLabel = new JLabel("Прев'ю", JLabel.CENTER);
         previewImageLabel.setPreferredSize(new Dimension(150, 120));
         previewImageLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         previewImageLabel.setOpaque(true);
         previewImageLabel.setBackground(Color.WHITE);
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.NONE;
-        topPanel.add(previewImageLabel, gbc);
+        gbcTop.gridx = 1; gbcTop.gridy = 4; gbcTop.anchor = GridBagConstraints.CENTER;
+        gbcTop.fill = GridBagConstraints.NONE;
+        topPanel.add(previewImageLabel, gbcTop);
 
-        return topPanel;
-    }
 
-    /**
-     * Створює панель вибору квітів і аксесуарів.
-     *
-     * @return панель вибору
-     */
-    private JPanel createSelectionPanel() {
+        formPanel.add(topPanel, BorderLayout.NORTH);
+
         JPanel selectionMainPanel = new JPanel(new GridLayout(1, 2, 10, 0));
         selectionMainPanel.setOpaque(false);
-        selectionMainPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        selectionMainPanel.setBorder(BorderFactory.createEmptyBorder(10,0,10,0));
 
-        JPanel availableItemsPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+        JPanel availableItemsPanel = new JPanel(new GridLayout(2,1,0,10));
         availableItemsPanel.setOpaque(false);
+        // Передаємо this.availableFlowersSource, який буде null на цьому етапі,
+        // але JList буде оновлено в конструкторі ПІСЛЯ ініціалізації availableFlowersSource
+        // або краще оновити дані після створення JList
         availableItemsPanel.add(createAvailableItemsSubPanel("Доступні квіти", true));
         availableItemsPanel.add(createAvailableItemsSubPanel("Доступні аксесуари", false));
 
-        if (availableFlowersList != null) {
-            availableFlowersList.setListData(availableFlowersSource.toArray(new Flower[0]));
+        // Оновлення даних для JList після їх створення
+        if (availableFlowersList != null && this.availableFlowersSource != null) {
+            availableFlowersList.setListData(this.availableFlowersSource.toArray(new Flower[0]));
         }
-        if (availableAccessoriesList != null) {
-            availableAccessoriesList.setListData(availableAccessoriesSource.toArray(new Accessory[0]));
+        if (availableAccessoriesList != null && this.availableAccessoriesSource != null) {
+            availableAccessoriesList.setListData(this.availableAccessoriesSource.toArray(new Accessory[0]));
         }
 
-        JPanel selectedItemsPanel = new JPanel(new GridLayout(2, 1, 0, 10));
+        JPanel selectedItemsPanel = new JPanel(new GridLayout(2,1,0,10));
         selectedItemsPanel.setOpaque(false);
         selectedItemsPanel.add(createSelectedItemsSubPanel("Квіти в букеті", true));
         selectedItemsPanel.add(createSelectedItemsSubPanel("Аксесуари в букеті", false));
 
         selectionMainPanel.add(availableItemsPanel);
         selectionMainPanel.add(selectedItemsPanel);
-        return selectionMainPanel;
+
+        formPanel.add(selectionMainPanel, BorderLayout.CENTER);
+
+        setupEnterNavigation(nameField, descriptionArea, discountSpinner );
+
+        return formPanel;
     }
 
     /**
-     * Створює підпанель для відображення доступних елементів (квітів або аксесуарів).
-     *
-     * @param title     заголовок панелі
-     * @param isFlowers чи є панель для квітів
-     * @return підпанель доступних елементів
+     * Створює підпанель для списку доступних елементів (квітів або аксесуарів).
      */
     private JPanel createAvailableItemsSubPanel(String title, boolean isFlowers) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
@@ -212,15 +196,14 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
         panel.setBorder(BorderFactory.createTitledBorder(title));
 
         if (isFlowers) {
+            // Ініціалізуємо JList порожнім масивом, щоб уникнути NPE
+            // Дані будуть завантажені пізніше з availableFlowersSource
             availableFlowersList = new JList<>(new Flower[0]);
             availableFlowersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             availableFlowersList.setCellRenderer(new FlowerRenderer());
             availableFlowersList.addMouseListener(new MouseAdapter() {
-                @Override
                 public void mouseClicked(MouseEvent evt) {
-                    if (evt.getClickCount() == 2) {
-                        addFlowerToList();
-                    }
+                    if (evt.getClickCount() == 2) addFlowerToList();
                 }
             });
             panel.add(new JScrollPane(availableFlowersList), BorderLayout.CENTER);
@@ -237,15 +220,14 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
             flowerControls.add(addFlowerButton);
             panel.add(flowerControls, BorderLayout.SOUTH);
         } else {
+            // Ініціалізуємо JList порожнім масивом
+            // Дані будуть завантажені пізніше з availableAccessoriesSource
             availableAccessoriesList = new JList<>(new Accessory[0]);
             availableAccessoriesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             availableAccessoriesList.setCellRenderer(new AccessoryRenderer());
             availableAccessoriesList.addMouseListener(new MouseAdapter() {
-                @Override
                 public void mouseClicked(MouseEvent evt) {
-                    if (evt.getClickCount() == 2) {
-                        addAccessoryToList();
-                    }
+                    if (evt.getClickCount() == 2) addAccessoryToList();
                 }
             });
             panel.add(new JScrollPane(availableAccessoriesList), BorderLayout.CENTER);
@@ -261,27 +243,18 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
         return panel;
     }
 
-    /**
-     * Створює підпанель для відображення вибраних елементів (квітів або аксесуарів).
-     *
-     * @param title     заголовок панелі
-     * @param isFlowers чи є панель для квітів
-     * @return підпанель вибраних елементів
-     */
     private JPanel createSelectedItemsSubPanel(String title, boolean isFlowers) {
-        JPanel panel = new JPanel(new BorderLayout(5, 5));
+        JPanel panel = new JPanel(new BorderLayout(5,5));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createTitledBorder(title));
 
         if (isFlowers) {
+            // selectedFlowersDisplayModel вже ініціалізовано в createFormPanel
             selectedFlowersDisplayList = new JList<>(selectedFlowersDisplayModel);
             selectedFlowersDisplayList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             selectedFlowersDisplayList.addMouseListener(new MouseAdapter() {
-                @Override
                 public void mouseClicked(MouseEvent evt) {
-                    if (evt.getClickCount() == 2) {
-                        removeFlowerFromList();
-                    }
+                    if (evt.getClickCount() == 2) removeFlowerFromList();
                 }
             });
             panel.add(new JScrollPane(selectedFlowersDisplayList), BorderLayout.CENTER);
@@ -293,16 +266,15 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
             controlPanel.setOpaque(false);
             controlPanel.add(removeFlowerButton);
             panel.add(controlPanel, BorderLayout.SOUTH);
+
         } else {
+            // selectedAccessoriesModel вже ініціалізовано в createFormPanel
             selectedAccessoriesDisplayList = new JList<>(selectedAccessoriesModel);
             selectedAccessoriesDisplayList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             selectedAccessoriesDisplayList.setCellRenderer(new AccessoryRenderer());
             selectedAccessoriesDisplayList.addMouseListener(new MouseAdapter() {
-                @Override
                 public void mouseClicked(MouseEvent evt) {
-                    if (evt.getClickCount() == 2) {
-                        removeAccessoryFromList();
-                    }
+                    if (evt.getClickCount() == 2) removeAccessoryFromList();
                 }
             });
             panel.add(new JScrollPane(selectedAccessoriesDisplayList), BorderLayout.CENTER);
@@ -318,11 +290,7 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
         return panel;
     }
 
-    // Обробка списків
 
-    /**
-     * Додає вибрану квітку до списку букета.
-     */
     private void addFlowerToList() {
         Flower selectedFlower = availableFlowersList.getSelectedValue();
         if (selectedFlower != null) {
@@ -331,6 +299,7 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
                 showErrorDialog("Кількість квітів має бути більшою за нуль.");
                 return;
             }
+            // selectedFlowersModel та currentFlowerQuantities вже мають бути ініціалізовані
             if (currentFlowerQuantities.containsKey(selectedFlower)) {
                 currentFlowerQuantities.put(selectedFlower, currentFlowerQuantities.get(selectedFlower) + quantity);
             } else {
@@ -339,28 +308,21 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
             }
             updateSelectedFlowersDisplay();
             flowerQuantitySpinner.setValue(1);
-            logger.debug("Додано квітку: {} (кількість: {})", selectedFlower.getShortInfo(), quantity);
         }
     }
 
-    /**
-     * Видаляє вибрану квітку зі списку букета.
-     */
     private void removeFlowerFromList() {
         int selectedIndex = selectedFlowersDisplayList.getSelectedIndex();
-        if (selectedIndex != -1 && selectedIndex < selectedFlowersModel.getSize()) {
+        if (selectedIndex != -1 && selectedIndex < selectedFlowersModel.getSize()) { // Додано перевірку selectedIndex < model.getSize()
             Flower flowerToRemove = selectedFlowersModel.getElementAt(selectedIndex);
             selectedFlowersModel.removeElement(flowerToRemove);
             currentFlowerQuantities.remove(flowerToRemove);
             updateSelectedFlowersDisplay();
-            logger.debug("Видалено квітку: {}", flowerToRemove.getShortInfo());
         }
     }
 
-    /**
-     * Оновлює відображення списку вибраних квіток.
-     */
     private void updateSelectedFlowersDisplay() {
+        // selectedFlowersDisplayModel та selectedFlowersModel, currentFlowerQuantities вже мають бути ініціалізовані
         selectedFlowersDisplayModel.clear();
         for (int i = 0; i < selectedFlowersModel.getSize(); i++) {
             Flower flower = selectedFlowersModel.getElementAt(i);
@@ -369,35 +331,29 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
         }
     }
 
-    /**
-     * Додає вибраний аксесуар до списку букета.
-     */
+
     private void addAccessoryToList() {
         Accessory selectedAccessory = availableAccessoriesList.getSelectedValue();
+        // selectedAccessoriesModel вже має бути ініціалізований
         if (selectedAccessory != null && !selectedAccessoriesModel.contains(selectedAccessory)) {
             selectedAccessoriesModel.addElement(selectedAccessory);
-            logger.debug("Додано аксесуар: {}", selectedAccessory.getShortInfo());
         }
     }
 
-    /**
-     * Видаляє вибраний аксесуар зі списку букета.
-     */
     private void removeAccessoryFromList() {
         Accessory selectedAccessory = selectedAccessoriesDisplayList.getSelectedValue();
+        // selectedAccessoriesModel вже має бути ініціалізований
         if (selectedAccessory != null) {
             selectedAccessoriesModel.removeElement(selectedAccessory);
-            logger.debug("Видалено аксесуар: {}", selectedAccessory.getShortInfo());
         }
     }
 
-    // Заповнення полів
 
-    /**
-     * Заповнює поля форми даними букета, якщо редагується існуючий букет.
-     */
     @Override
     protected void populateFields() {
+        // Моделі (currentFlowerQuantities, selectedFlowersModel, selectedAccessoriesModel)
+        // вже мають бути ініціалізовані на момент виклику цього методу
+        // (вони ініціалізуються в createFormPanel, який викликається раніше, ніж populateFields з конструктора)
         if (item != null) {
             nameField.setText(item.getName());
             descriptionArea.setText(item.getDescription());
@@ -415,6 +371,7 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
             }
             updateSelectedFlowersDisplay();
 
+
             selectedAccessoriesModel.clear();
             if (item.getAccessories() != null) {
                 for (Accessory acc : item.getAccessories()) {
@@ -424,13 +381,6 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
         }
     }
 
-    // Збереження даних
-
-    /**
-     * Зберігає введені дані у об'єкт букета.
-     *
-     * @return true, якщо збереження успішне, інакше false
-     */
     @Override
     protected boolean saveItem() {
         try {
@@ -439,12 +389,12 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
             double discount = (Double) discountSpinner.getValue();
             String imagePath = imagePathField.getText().trim();
 
-            // Валідація полів
             if (name.isEmpty()) {
                 showErrorDialog("Назва букета не може бути порожньою.");
                 nameField.requestFocusInWindow();
                 return false;
             }
+            // selectedFlowersModel та selectedAccessoriesModel вже мають бути ініціалізовані
             if (selectedFlowersModel.isEmpty() && selectedAccessoriesModel.isEmpty()) {
                 showErrorDialog("Букет повинен містити хоча б одну квітку або аксесуар.");
                 return false;
@@ -459,7 +409,6 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
                 }
             }
 
-            // Формування списків квітів і аксесуарів
             List<Flower> finalSelectedFlowers = new ArrayList<>();
             for (int i = 0; i < selectedFlowersModel.getSize(); i++) {
                 finalSelectedFlowers.add(selectedFlowersModel.getElementAt(i));
@@ -470,44 +419,41 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
                 finalSelectedAccessories.add(selectedAccessoriesModel.getElementAt(i));
             }
 
-            // Збереження даних
+
             if (item == null) {
-                item = new Bouquet(name, description, (List<Flower>) new HashMap<>(currentFlowerQuantities), finalSelectedAccessories, imagePath, discount);
+                item = new Bouquet(name, description, finalSelectedFlowers, finalSelectedAccessories, imagePath, discount);
             } else {
                 item.setName(name);
                 item.setDescription(description);
                 item.setDiscount(discount);
                 item.setImagePath(imagePath);
-                item.setFlowerQuantities(new HashMap<>(currentFlowerQuantities));
-                item.setAccessories(finalSelectedAccessories);
+                item.clearFlowers();
+                item.addFlowers(finalSelectedFlowers); // Цей метод має обробляти кількість правильно, або...
+                item.clearAccessories();
+                item.addAccessories(finalSelectedAccessories);
             }
-            logger.info("Букет успішно збережений: {}", name);
+
+            // Оновлюємо кількість квітів в об'єкті букета
+            // currentFlowerQuantities та finalSelectedFlowers мають бути узгоджені
+            for(Flower f : finalSelectedFlowers) {
+                item.setFlowerQuantity(f, currentFlowerQuantities.getOrDefault(f, 1));
+            }
+
             return true;
         } catch (NumberFormatException ex) {
             showErrorDialog("Будь ласка, перевірте числові значення (знижка).");
-            logger.error("Помилка формату чисел: {}", ex.getMessage());
             return false;
         } catch (Exception ex) {
             showErrorDialog("Сталася помилка: " + ex.getMessage());
-            logger.error("Помилка збереження букета: {}", ex.getMessage());
+            ex.printStackTrace();
             return false;
         }
     }
 
-    /**
-     * Повертає об'єкт букета.
-     *
-     * @return збережений або редагований букет
-     */
     public Bouquet getBouquet() {
         return item;
     }
 
-    // Рендерери
-
-    /**
-     * Рендерер для відображення квіток у списках.
-     */
     private static class FlowerRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -519,9 +465,6 @@ public class AddEditBouquetDialog extends AbstractAddEditDialog<Bouquet> {
         }
     }
 
-    /**
-     * Рендерер для відображення аксесуарів у списках.
-     */
     private static class AccessoryRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
