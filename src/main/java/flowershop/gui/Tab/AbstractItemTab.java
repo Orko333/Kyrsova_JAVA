@@ -29,39 +29,38 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
     private static final Logger logger = LogManager.getLogger(AbstractItemTab.class);
 
     // Константи для стилізації UI
-    protected static final Color PRIMARY_COLOR = new Color(76, 175, 80); // Основний зелений колір
-    protected static final Color SECONDARY_COLOR = new Color(220, 237, 200); // Світло-зелений для фону
-    protected static final Color ACCENT_COLOR = new Color(255, 152, 0); // Акцентний оранжевий
-    protected static final Font TITLE_FONT = new Font("Segoe UI", Font.BOLD, 14); // Шрифт для заголовків
-    protected static final Font REGULAR_FONT = new Font("Segoe UI", Font.PLAIN, 13); // Стандартний шрифт
-    protected static final int BUTTON_HEIGHT = 30; // Висота кнопок
+    protected static final Color PRIMARY_COLOR = new Color(76, 175, 80);
+    protected static final Color SECONDARY_COLOR = new Color(220, 237, 200);
+    protected static final Color ACCENT_COLOR = new Color(255, 152, 0);
+    protected static final Font TITLE_FONT = new Font("Segoe UI", Font.BOLD, 14);
+    protected static final Font REGULAR_FONT = new Font("Segoe UI", Font.PLAIN, 13);
+    protected static final int BUTTON_HEIGHT = 30;
 
     // DAO для роботи з даними
-    protected D itemDAO;
+    protected final D itemDAO;
 
     // Елементи інтерфейсу
-    protected JTable itemsTable; // Таблиця для відображення елементів
-    protected DefaultTableModel tableModel; // Модель даних для таблиці
-    protected JTextField searchField; // Поле для пошуку
-    protected JButton addButton, editButton, deleteButton, clearFiltersButton; // Кнопки керування
-    protected JButton exportButton, sortButton; // Кнопки експорту та сортування
-    protected JTextPane detailsPane; // Панель для детальної інформації
-    protected JLabel imageLabel; // Мітка для зображення
-    protected JPanel paginationPanel; // Панель пагінації
-    protected JLabel pageInfoLabel; // Мітка інформації про сторінку
-    protected JProgressBar stockLevelBar; // (Опціонально) Прогрес-бар для рівня запасів
+    protected JTable itemsTable;
+    protected DefaultTableModel tableModel;
+    protected JTextField searchField;
+    protected JButton addButton, editButton, deleteButton, clearFiltersButton, exportButton;
+    protected JTextPane detailsPane;
+    protected JLabel imageLabel;
+    protected JPanel paginationPanel;
+    protected JLabel pageInfoLabel;
+    protected JProgressBar stockLevelBar;
 
     // Параметри пагінації
-    protected int currentPage = 1; // Поточна сторінка
-    protected int rowsPerPage = 10; // Кількість рядків на сторінці
+    protected int currentPage = 1;
+    protected int rowsPerPage = 10;
 
     // Форматування
-    protected DecimalFormat priceFormat = new DecimalFormat("#,##0.00"); // Формат для цін
+    protected final DecimalFormat priceFormat = new DecimalFormat("#,##0.00");
 
     /**
      * Конструктор абстрактного класу вкладки.
      *
-     * @param itemDAO DAO для роботи з елементами.
+     * @param itemDAO DAO для роботи з елементами
      */
     public AbstractItemTab(D itemDAO) {
         this.itemDAO = itemDAO;
@@ -69,9 +68,11 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         initializeBaseUI();
     }
 
+    // Ініціалізація UI
+
     /**
      * Ініціалізує базовий графічний інтерфейс користувача.
-     * Нащадки можуть розширювати цей метод для додавання специфічних елементів.
+     * Встановлює стилі, створює заголовок, панель інструментів, таблицю, панель деталей і пагінацію.
      */
     protected void initializeBaseUI() {
         logger.info("Ініціалізація базового UI для вкладки '{}'", getTabTitle());
@@ -79,6 +80,20 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         setBackground(Color.WHITE);
 
+        configureGlobalStyles();
+        add(createHeaderPanel(), BorderLayout.NORTH);
+        JPanel contentPanel = createContentPanel();
+        add(contentPanel, BorderLayout.CENTER);
+        add(createPaginationPanel(), BorderLayout.SOUTH);
+
+        refreshTableData();
+        logger.info("Базовий UI для вкладки '{}' успішно ініціалізовано.", getTabTitle());
+    }
+
+    /**
+     * Налаштовує глобальні стилі для компонентів Swing.
+     */
+    private void configureGlobalStyles() {
         UIManager.put("Button.background", SECONDARY_COLOR);
         UIManager.put("Button.font", REGULAR_FONT);
         UIManager.put("Label.font", REGULAR_FONT);
@@ -88,58 +103,64 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         UIManager.put("TableHeader.font", new Font("Segoe UI", Font.BOLD, 13));
         UIManager.put("Spinner.font", REGULAR_FONT);
         logger.debug("Глобальні налаштування стилів Swing встановлено.");
+    }
 
+    /**
+     * Створює панель заголовка з назвою вкладки та панеллю інструментів.
+     *
+     * @return панель заголовка
+     */
+    private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(Color.WHITE);
+
         JLabel titleLabel = new JLabel(getTabTitle());
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         titleLabel.setForeground(PRIMARY_COLOR);
         titleLabel.setBorder(new EmptyBorder(0, 0, 10, 0));
         headerPanel.add(titleLabel, BorderLayout.WEST);
 
-        JToolBar toolBar = createToolBar();
-        headerPanel.add(toolBar, BorderLayout.EAST);
-        add(headerPanel, BorderLayout.NORTH);
-        logger.debug("Панель заголовка та панель інструментів створено та додано.");
+        headerPanel.add(createToolBar(), BorderLayout.EAST);
+        return headerPanel;
+    }
+
+    /**
+     * Створює панель контенту з фільтрами, таблицею та деталями.
+     *
+     * @return панель контенту
+     */
+    private JPanel createContentPanel() {
+        JPanel contentPanel = new JPanel(new BorderLayout(0, 10));
+        contentPanel.setBackground(Color.WHITE);
 
         JPanel filterPanel = createFilterPanel();
-        logger.debug("Панель фільтрів створена (може бути null).");
+        if (filterPanel != null) {
+            contentPanel.add(filterPanel, BorderLayout.NORTH);
+        }
 
         createTable();
         JScrollPane tableScrollPane = new JScrollPane(itemsTable);
         tableScrollPane.getViewport().setBackground(Color.WHITE);
         tableScrollPane.setBorder(BorderFactory.createLineBorder(SECONDARY_COLOR, 1));
-        logger.debug("Таблиця та панель прокрутки створені.");
 
-        JPanel detailsPanel = createDetailsPanel();
-        logger.debug("Панель деталей створена.");
-
-        JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScrollPane, detailsPanel);
+        JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, tableScrollPane, createDetailsPanel());
         mainSplit.setDividerLocation(350);
         mainSplit.setContinuousLayout(true);
         mainSplit.setDividerSize(8);
         mainSplit.setBorder(null);
 
-        JPanel contentPanel = new JPanel(new BorderLayout(0, 10));
-        contentPanel.setBackground(Color.WHITE);
-        if (filterPanel != null) {
-            contentPanel.add(filterPanel, BorderLayout.NORTH);
-            logger.debug("Панель фільтрів додана до панелі контенту.");
-        }
         contentPanel.add(mainSplit, BorderLayout.CENTER);
-        add(contentPanel, BorderLayout.CENTER);
-        logger.debug("Основна розділена панель та панель контенту створені та додані.");
-
-        paginationPanel = createPaginationPanel();
-        add(paginationPanel, BorderLayout.SOUTH);
-        logger.debug("Панель пагінації створена та додана.");
-
-        refreshTableData();
-        logger.info("Базовий UI для вкладки '{}' успішно ініціалізовано. Початкові дані завантажено.", getTabTitle());
+        return contentPanel;
     }
 
+    // Панель інструментів
+
+    /**
+     * Створює панель інструментів із кнопками для додавання, редагування, видалення та експорту.
+     *
+     * @return панель інструментів
+     */
     protected JToolBar createToolBar() {
-        logger.debug("Створення панелі інструментів.");
         JToolBar toolBar = new JToolBar();
         toolBar.setFloatable(false);
         toolBar.setOpaque(false);
@@ -149,7 +170,6 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         editButton = createStyledButton("Редагувати", null);
         deleteButton = createStyledButton("Видалити", "InternalFrame.closeIcon");
         exportButton = createStyledButton("Експорт", "FileChooser.floppyDriveIcon");
-        sortButton = createStyledButton("Сортування", "Table.ascendingSortIcon");
 
         toolBar.add(addButton);
         toolBar.addSeparator(new Dimension(5, 0));
@@ -159,29 +179,29 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         toolBar.addSeparator(new Dimension(15, 0));
         toolBar.add(exportButton);
         toolBar.addSeparator(new Dimension(5, 0));
-        toolBar.add(sortButton);
 
-        addButton.addActionListener(e -> { logger.info("Натиснуто кнопку 'Додати'."); showAddEditDialog(e); });
-        editButton.addActionListener(e -> { logger.info("Натиснуто кнопку 'Редагувати'."); showAddEditDialog(e); });
-        deleteButton.addActionListener(e -> { logger.info("Натиснуто кнопку 'Видалити'."); deleteSelectedItem(e); });
-        exportButton.addActionListener(e -> { logger.info("Натиснуто кнопку 'Експорт'."); exportData(e); });
-        sortButton.addActionListener(e -> { logger.info("Натиснуто кнопку 'Сортування'."); showSortDialog(e); });
+        addButton.addActionListener(e -> showAddEditDialog(e));
+        editButton.addActionListener(e -> showAddEditDialog(e));
+        deleteButton.addActionListener(e -> deleteSelectedItem(e));
+        exportButton.addActionListener(e -> exportData(e));
 
-        logger.debug("Панель інструментів створена.");
         return toolBar;
     }
 
+    /**
+     * Створює стилізовану кнопку з текстом та іконкою.
+     *
+     * @param text           текст кнопки
+     * @param uiManagerIconKey ключ іконки з UIManager
+     * @return стилізована кнопка
+     */
     protected JButton createStyledButton(String text, String uiManagerIconKey) {
-        logger.trace("Створення стилізованої кнопки: '{}', ключ іконки: '{}'", text, uiManagerIconKey);
         JButton button = new JButton(text);
-        Icon icon = null;
-        if (uiManagerIconKey != null && !uiManagerIconKey.isEmpty()) {
-            icon = UIManager.getIcon(uiManagerIconKey);
-        }
+        Icon icon = uiManagerIconKey != null ? UIManager.getIcon(uiManagerIconKey) : null;
 
         if (icon != null) {
             button.setIcon(icon);
-        } else if (uiManagerIconKey != null && !uiManagerIconKey.isEmpty()) {
+        } else if (uiManagerIconKey != null) {
             logger.warn("Стандартна іконка не знайдена для ключа: {}. Кнопка '{}' буде без іконки.", uiManagerIconKey, text);
         }
 
@@ -193,14 +213,17 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
                 BorderFactory.createLineBorder(PRIMARY_COLOR, 1),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
-        button.setMargin(new Insets(5, (icon != null ? 5 : 10), 5, 10));
+        button.setMargin(new Insets(5, icon != null ? 5 : 10, 5, 10));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(PRIMARY_COLOR);
                 button.setForeground(Color.WHITE);
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(SECONDARY_COLOR);
                 button.setForeground(new Color(50, 50, 50));
@@ -209,13 +232,18 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         return button;
     }
 
+    // Таблиця
+
+    /**
+     * Створює таблицю для відображення елементів із заданими стовпцями та стилем.
+     */
     protected void createTable() {
-        logger.debug("Створення таблиці.");
         tableModel = new DefaultTableModel(getColumnNames(), 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 return getColumnClasses()[columnIndex];
@@ -226,7 +254,6 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         itemsTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         itemsTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                logger.trace("Зміна вибору в таблиці.");
                 updateDetailsPanel();
             }
         });
@@ -248,20 +275,37 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         header.setReorderingAllowed(false);
 
         itemsTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 if (evt.getClickCount() == 2) {
-                    logger.info("Подвійний клік на таблиці, виклик діалогу редагування.");
                     showAddEditDialog(null);
                 }
             }
         });
 
         configureTableColumnWidths();
-        logger.debug("Таблиця успішно створена та налаштована.");
     }
 
+    /**
+     * Налаштовує ширину стовпців таблиці. За замовчуванням встановлює ширину для стовпця ID.
+     * Нащадки можуть перевизначити для специфічного налаштування.
+     */
+    protected void configureTableColumnWidths() {
+        if (itemsTable.getColumnModel().getColumnCount() > 0) {
+            itemsTable.getColumnModel().getColumn(0).setPreferredWidth(40);
+            itemsTable.getColumnModel().getColumn(0).setMinWidth(30);
+            itemsTable.getColumnModel().getColumn(0).setMaxWidth(80);
+        }
+    }
+
+    // Панель деталей
+
+    /**
+     * Створює панель деталей для відображення інформації про вибраний елемент.
+     *
+     * @return панель деталей
+     */
     protected JPanel createDetailsPanel() {
-        logger.debug("Створення панелі деталей.");
         JPanel detailsPanel = new JPanel(new BorderLayout(10, 0));
         detailsPanel.setBackground(Color.WHITE);
         detailsPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -305,7 +349,6 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         imageAndExtraPanel.add(imagePanel, BorderLayout.CENTER);
 
         if (hasStockLevelBar()) {
-            logger.debug("Додавання прогрес-бару рівня запасів до панелі деталей.");
             JPanel statsPanel = new JPanel(new BorderLayout());
             statsPanel.setBackground(Color.WHITE);
             statsPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -328,12 +371,17 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
 
         detailsPanel.add(detailsScroll, BorderLayout.CENTER);
         detailsPanel.add(imageAndExtraPanel, BorderLayout.EAST);
-        logger.debug("Панель деталей створена.");
         return detailsPanel;
     }
 
+    // Пагінація
+
+    /**
+     * Створює панель пагінації з кнопками для навігації між сторінками.
+     *
+     * @return панель пагінації
+     */
     protected JPanel createPaginationPanel() {
-        logger.debug("Створення панелі пагінації.");
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, SECONDARY_COLOR));
@@ -347,21 +395,18 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         JButton lastButton = createPaginationButton(">>", "SplitPane.rightArrowIcon");
 
         firstButton.addActionListener(e -> {
-            logger.debug("Натиснуто кнопку пагінації 'Перша сторінка'.");
             if (currentPage > 1) {
                 currentPage = 1;
                 applyFiltersAndRefresh();
             }
         });
         prevButton.addActionListener(e -> {
-            logger.debug("Натиснуто кнопку пагінації 'Попередня сторінка'.");
             if (currentPage > 1) {
                 currentPage--;
                 applyFiltersAndRefresh();
             }
         });
         nextButton.addActionListener(e -> {
-            logger.debug("Натиснуто кнопку пагінації 'Наступна сторінка'.");
             List<T> allItems = getAllItemsFromDAO();
             List<T> filteredItems = filterItems(allItems);
             int totalPages = (int) Math.ceil((double) filteredItems.size() / rowsPerPage);
@@ -372,7 +417,6 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
             }
         });
         lastButton.addActionListener(e -> {
-            logger.debug("Натиснуто кнопку пагінації 'Остання сторінка'.");
             List<T> allItems = getAllItemsFromDAO();
             List<T> filteredItems = filterItems(allItems);
             int totalPages = (int) Math.ceil((double) filteredItems.size() / rowsPerPage);
@@ -388,25 +432,26 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         panel.add(pageInfoLabel);
         panel.add(nextButton);
         panel.add(lastButton);
-        logger.debug("Панель пагінації створена.");
         return panel;
     }
 
+    /**
+     * Створює кнопку пагінації з іконкою або текстом.
+     *
+     * @param text           текст кнопки
+     * @param uiManagerIconKey ключ іконки з UIManager
+     * @return кнопка пагінації
+     */
     protected JButton createPaginationButton(String text, String uiManagerIconKey) {
-        logger.trace("Створення кнопки пагінації: '{}', ключ іконки: '{}'", text, uiManagerIconKey);
         JButton button = new JButton();
-        Icon icon = null;
-
-        if (uiManagerIconKey != null && !uiManagerIconKey.isEmpty()) {
-            icon = UIManager.getIcon(uiManagerIconKey);
-        }
+        Icon icon = uiManagerIconKey != null ? UIManager.getIcon(uiManagerIconKey) : null;
 
         if (icon != null) {
             button.setIcon(icon);
             button.setToolTipText(text);
         } else {
             button.setText(text);
-            if (uiManagerIconKey != null && !uiManagerIconKey.isEmpty()){
+            if (uiManagerIconKey != null) {
                 logger.warn("Стандартна іконка пагінації не знайдена для ключа: {}. Використовується текст: {}", uiManagerIconKey, text);
             }
         }
@@ -423,10 +468,13 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 button.setBackground(PRIMARY_COLOR);
                 button.setForeground(Color.WHITE);
             }
+
+            @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 button.setBackground(SECONDARY_COLOR);
                 button.setForeground(new Color(50, 50, 50));
@@ -435,25 +483,29 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         return button;
     }
 
+    // Оновлення даних
+
+    /**
+     * Оновлює дані в таблиці, застосовуючи фільтри та пагінацію.
+     */
     protected void refreshTableData() {
-        logger.info("Оновлення даних у таблиці для вкладки '{}'.", getTabTitle());
-        // List<T> allItems = getAllItemsFromDAO(); // Отримується в applyFiltersAndPagination
         tableModel.setRowCount(0);
         applyFiltersAndPagination();
-        logger.debug("Дані в таблиці оновлено.");
     }
 
+    /**
+     * Застосовує фільтри та оновлює таблицю.
+     */
     protected void applyFiltersAndRefresh() {
-        logger.debug("Застосування фільтрів та оновлення таблиці.");
         applyFiltersAndPagination();
     }
 
+    /**
+     * Застосовує фільтри та пагінацію до даних таблиці.
+     */
     private void applyFiltersAndPagination() {
-        logger.debug("Застосування фільтрів та пагінації. Поточна сторінка: {}", currentPage);
         List<T> allItems = getAllItemsFromDAO();
-        logger.trace("Завантажено {} всіх елементів з DAO.", allItems.size());
         List<T> filteredItems = filterItems(allItems);
-        logger.trace("Після фільтрації залишилося {} елементів.", filteredItems.size());
 
         int totalFilteredRows = filteredItems.size();
         int totalPages = (int) Math.ceil((double) totalFilteredRows / rowsPerPage);
@@ -461,22 +513,24 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
 
         if (currentPage > totalPages) currentPage = totalPages;
         if (currentPage < 1) currentPage = 1;
-        logger.trace("Розраховано сторінок: {}, скоригована поточна сторінка: {}", totalPages, currentPage);
 
         tableModel.setRowCount(0);
 
         int startIdx = (currentPage - 1) * rowsPerPage;
         int endIdx = Math.min(startIdx + rowsPerPage, totalFilteredRows);
-        logger.trace("Відображення елементів з {} по {} (включно).", startIdx, endIdx -1 );
 
         for (int i = startIdx; i < endIdx; i++) {
             tableModel.addRow(getRowDataForItem(filteredItems.get(i)));
         }
         updatePaginationLabel(totalFilteredRows);
         updateDetailsPanel();
-        logger.debug("Фільтрація та пагінація застосовані. Таблиця оновлена.");
     }
 
+    /**
+     * Оновлює мітку пагінації з інформацією про поточну сторінку та кількість записів.
+     *
+     * @param totalFilteredItems кількість відфільтрованих елементів
+     */
     protected void updatePaginationLabel(int totalFilteredItems) {
         int totalPages = (int) Math.ceil((double) totalFilteredItems / rowsPerPage);
         if (totalPages == 0) totalPages = 1;
@@ -487,32 +541,28 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         int startRow = totalFilteredItems == 0 ? 0 : (currentPage - 1) * rowsPerPage + 1;
         int endRow = Math.min(currentPage * rowsPerPage, totalFilteredItems);
 
-        String labelText;
-        if (totalFilteredItems == 0) {
-            labelText = "Немає записів";
-        } else {
-            labelText = String.format("Сторінка %d з %d (записи %d-%d з %d)",
-                    currentPage, totalPages, startRow, endRow, totalFilteredItems);
-        }
+        String labelText = totalFilteredItems == 0
+                ? "Немає записів"
+                : String.format("Сторінка %d з %d (записи %d-%d з %d)", currentPage, totalPages, startRow, endRow, totalFilteredItems);
         pageInfoLabel.setText(labelText);
-        logger.trace("Мітка пагінації оновлена: {}", labelText);
     }
 
+    // Панель деталей
+
+    /**
+     * Оновлює панель деталей для відображення інформації про вибраний елемент.
+     */
     protected void updateDetailsPanel() {
         int selectedRow = itemsTable.getSelectedRow();
-        logger.trace("Оновлення панелі деталей. Вибраний рядок у View: {}", selectedRow);
         if (selectedRow >= 0 && selectedRow < itemsTable.getRowCount()) {
             int modelRow = itemsTable.convertRowIndexToModel(selectedRow);
-            logger.trace("Індекс вибраного рядка в Model: {}", modelRow);
             T selectedItem = getItemByModelRow(modelRow);
 
             if (selectedItem != null) {
-                logger.debug("Відображення деталей для елемента: {}", selectedItem.toString());
                 detailsPane.setText(getDetailedInfoForItem(selectedItem));
                 detailsPane.setCaretPosition(0);
 
                 String imagePath = getImagePathForItem(selectedItem);
-                logger.trace("Шлях до зображення для деталей: {}", imagePath);
                 try {
                     if (imagePath != null && !imagePath.isEmpty()) {
                         File imageFile = new File(imagePath);
@@ -525,7 +575,7 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
                             int newWidth = originalWidth;
                             int newHeight = originalHeight;
 
-                            if (originalWidth > 0 && originalHeight > 0) { // Захист від некоректних зображень
+                            if (originalWidth > 0 && originalHeight > 0) {
                                 if (originalWidth > panelWidth) {
                                     newWidth = panelWidth;
                                     newHeight = (newWidth * originalHeight) / originalWidth;
@@ -537,41 +587,38 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
                                 Image scaledImg = img.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                                 imageLabel.setIcon(new ImageIcon(scaledImg));
                                 imageLabel.setText(null);
-                                logger.debug("Зображення '{}' успішно завантажено та відображено.", imagePath);
                             } else {
-                                logger.warn("Некоректні розміри зображення (ширина або висота <= 0): {}", imagePath);
                                 imageLabel.setIcon(null);
                                 imageLabel.setText("<html><center>Помилка<br>зображення</center></html>");
                             }
                         } else {
                             imageLabel.setIcon(null);
                             imageLabel.setText("<html><center>Зображення<br>не знайдено</center></html>");
-                            logger.warn("Файл зображення не знайдено: {}", imagePath);
                         }
                     } else {
                         imageLabel.setIcon(null);
                         imageLabel.setText("<html><center>Зображення<br>відсутнє</center></html>");
-                        logger.trace("Шлях до зображення порожній або null.");
                     }
                 } catch (Exception e) {
                     imageLabel.setIcon(null);
                     imageLabel.setText("<html><center>Помилка<br>завантаження</center></html>");
-                    logger.error("Помилка завантаження зображення '{}': {}", imagePath, e.getMessage(), e);
+                    logger.error("Помилка завантаження зображення '{}': {}", imagePath, e.getMessage());
                 }
 
                 if (hasStockLevelBar() && stockLevelBar != null) {
                     updateStockLevelBar(selectedItem);
                 }
             } else {
-                logger.warn("Не вдалося отримати елемент для рядка моделі: {}", modelRow);
                 clearDetailsPanel();
             }
         } else {
-            logger.trace("Жоден рядок не вибрано, очищення панелі деталей.");
             clearDetailsPanel();
         }
     }
 
+    /**
+     * Очищає панель деталей, відображаючи повідомлення про відсутність вибраного елемента.
+     */
     protected void clearDetailsPanel() {
         detailsPane.setText(String.format("<html><body style='font-family:Segoe UI; padding:10px;'>Оберіть %s для перегляду деталей</body></html>", getItemNameSingular()));
         imageLabel.setIcon(null);
@@ -581,15 +628,16 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
             stockLevelBar.setString("0 шт.");
             stockLevelBar.setForeground(PRIMARY_COLOR);
         }
-        logger.debug("Панель деталей очищено.");
     }
 
-    protected String colorToHex(Color color) {
-        return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
-    }
+    // Експорт даних
 
+    /**
+     * Експортує дані таблиці у CSV-файл.
+     *
+     * @param e подія, що викликала експорт
+     */
     protected void exportData(ActionEvent e) {
-        logger.info("Ініціювання експорту даних у CSV.");
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Експорт даних у CSV");
         fileChooser.setFileFilter(new FileNameExtensionFilter("CSV файли (*.csv)", "csv"));
@@ -600,13 +648,11 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
             if (!file.getName().toLowerCase().endsWith(".csv")) {
                 file = new File(file.getAbsolutePath() + ".csv");
             }
-            logger.info("Файл для експорту обрано: {}", file.getAbsolutePath());
 
             File finalFile = file;
             SwingWorker<Void, Integer> worker = new SwingWorker<>() {
                 @Override
                 protected Void doInBackground() throws Exception {
-                    logger.debug("Початок фонового завдання експорту.");
                     StringBuilder csv = new StringBuilder();
                     String[] columns = getColumnNames();
                     for (int i = 0; i < columns.length; i++) {
@@ -616,11 +662,8 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
                     csv.append("\n");
 
                     List<T> itemsToExport = getAllItemsFromDAO();
-                    int rowCount = itemsToExport.size();
-                    logger.debug("Експортується {} рядків.", rowCount);
-
-                    for (int i = 0; i < rowCount; i++) {
-                        Object[] rowData = getRowDataForItem(itemsToExport.get(i));
+                    for (T item : itemsToExport) {
+                        Object[] rowData = getRowDataForItem(item);
                         for (int j = 0; j < rowData.length; j++) {
                             csv.append(escapeCSV(rowData[j] != null ? rowData[j].toString() : ""));
                             if (j < rowData.length - 1) csv.append(",");
@@ -628,32 +671,34 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
                         csv.append("\n");
                     }
                     java.nio.file.Files.writeString(finalFile.toPath(), csv.toString(), java.nio.charset.StandardCharsets.UTF_8);
-                    logger.info("Дані успішно записані у файл: {}", finalFile.getAbsolutePath());
                     return null;
                 }
 
                 @Override
                 protected void done() {
                     try {
-                        get(); // Перевірка на помилки з doInBackground
+                        get();
                         JOptionPane.showMessageDialog(AbstractItemTab.this,
                                 "Дані успішно експортовано до:\n" + finalFile.getAbsolutePath(),
                                 "Експорт завершено", JOptionPane.INFORMATION_MESSAGE);
-                        logger.info("Експорт даних успішно завершено.");
                     } catch (Exception ex) {
                         JOptionPane.showMessageDialog(AbstractItemTab.this,
                                 "Помилка при експорті даних: " + ex.getMessage(),
                                 "Помилка експорту", JOptionPane.ERROR_MESSAGE);
-                        logger.error("Помилка під час експорту даних: {}", ex.getMessage(), ex);
+                        logger.error("Помилка під час експорту даних: {}", ex.getMessage());
                     }
                 }
             };
             worker.execute();
-        } else {
-            logger.debug("Експорт даних скасовано користувачем.");
         }
     }
 
+    /**
+     * Екранує значення для коректного запису у CSV-файл.
+     *
+     * @param value значення для екранування
+     * @return екрановане значення
+     */
     protected String escapeCSV(String value) {
         if (value == null) return "";
         String result = value.replace("\"", "\"\"");
@@ -663,57 +708,179 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         return result;
     }
 
+    /**
+     * Перетворює колір у шістнадцятковий формат (#RRGGBB).
+     *
+     * @param color колір
+     * @return шістнадцятковий код кольору
+     */
+    protected String colorToHex(Color color) {
+        return String.format("#%02x%02x%02x", color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    // Абстрактні методи
+
+    /**
+     * Повертає заголовок вкладки.
+     *
+     * @return рядок із назвою вкладки
+     */
     protected abstract String getTabTitle();
+
+    /**
+     * Повертає назви стовпців таблиці.
+     *
+     * @return масив рядків із назвами стовпців
+     */
     protected abstract String[] getColumnNames();
+
+    /**
+     * Повертає класи даних для стовпців таблиці.
+     *
+     * @return масив класів, що відповідають типам даних стовпців
+     */
     protected abstract Class<?>[] getColumnClasses();
+
+    /**
+     * Формує дані для рядка таблиці на основі об'єкта елемента.
+     *
+     * @param item об'єкт елемента
+     * @return масив об'єктів із даними для відображення в таблиці
+     */
     protected abstract Object[] getRowDataForItem(T item);
+
+    /**
+     * Створює панель фільтрів для пошуку та фільтрації елементів.
+     *
+     * @return панель із компонентами фільтрів або null, якщо фільтри не потрібні
+     */
     protected abstract JPanel createFilterPanel();
+
+    /**
+     * Фільтрує список елементів на основі заданих критеріїв.
+     *
+     * @param allItems повний список елементів
+     * @return відфільтрований список елементів
+     */
     protected abstract List<T> filterItems(List<T> allItems);
+
+    /**
+     * Очищає всі фільтри та оновлює таблицю.
+     */
     protected abstract void clearFilters();
+
+    /**
+     * Повертає заголовок панелі деталей.
+     *
+     * @return рядок із назвою панелі деталей
+     */
     protected abstract String getDetailsPanelTitle();
+
+    /**
+     * Повертає детальну інформацію про елемент для відображення.
+     *
+     * @param item об'єкт елемента
+     * @return рядок із детальною інформацією або порожній рядок, якщо елемент null
+     */
     protected abstract String getDetailedInfoForItem(T item);
+
+    /**
+     * Повертає шлях до зображення елемента.
+     *
+     * @param item об'єкт елемента
+     * @return шлях до зображення або null, якщо елемент null або зображення відсутнє
+     */
     protected abstract String getImagePathForItem(T item);
+
+    /**
+     * Вказує, чи використовується панель рівня запасів.
+     *
+     * @return true, якщо панель рівня запасів потрібна, інакше false
+     */
     protected abstract boolean hasStockLevelBar();
+
+    /**
+     * Оновлює панель рівня запасів для елемента.
+     *
+     * @param item об'єкт елемента
+     */
     protected abstract void updateStockLevelBar(T item);
+
+    /**
+     * Повертає назву елемента в однині.
+     *
+     * @return рядок із назвою елемента
+     */
     protected abstract String getItemNameSingular();
+
+    /**
+     * Відкриває діалог для додавання або редагування елемента.
+     *
+     * @param e подія, що викликала діалог (може бути null)
+     */
     protected abstract void showAddEditDialog(ActionEvent e);
+
+    /**
+     * Видаляє вибраний елемент із таблиці та бази даних.
+     *
+     * @param e подія, що викликала видалення
+     */
     protected abstract void deleteSelectedItem(ActionEvent e);
-    protected abstract void showSortDialog(ActionEvent e);
+
+    /**
+     * Отримує список усіх елементів із DAO.
+     *
+     * @return список усіх елементів
+     */
     protected abstract List<T> getAllItemsFromDAO();
+
+    /**
+     * Отримує елемент за його ідентифікатором із DAO.
+     *
+     * @param id ідентифікатор елемента
+     * @return об'єкт елемента або null, якщо не знайдено
+     */
     protected abstract T getItemByIdFromDAO(int id);
 
+    /**
+     * Отримує елемент за індексом рядка в моделі таблиці.
+     *
+     * @param modelRow індекс рядка в моделі
+     * @return об'єкт елемента або null, якщо елемент не знайдено
+     */
     protected T getItemByModelRow(int modelRow) {
-        logger.trace("Спроба отримати елемент за індексом моделі: {}", modelRow);
         if (modelRow >= 0 && modelRow < tableModel.getRowCount()) {
             Object idObj = tableModel.getValueAt(modelRow, 0);
             if (idObj instanceof Integer) {
-                int itemId = (Integer) idObj;
-                logger.trace("ID елемента: {}", itemId);
-                return getItemByIdFromDAO(itemId);
-            } else {
-                logger.warn("ID елемента в таблиці ({}) не є Integer. Тип: {}", idObj, (idObj != null ? idObj.getClass().getName() : "null"));
+                return getItemByIdFromDAO((Integer) idObj);
             }
-        } else {
-            logger.warn("Індекс рядка моделі ({}) поза межами таблиці (0-{}).", modelRow, tableModel.getRowCount() -1);
         }
         return null;
     }
 
-    protected void configureTableColumnWidths() {
-        logger.debug("Налаштування ширини стовпців таблиці.");
-        if (itemsTable.getColumnModel().getColumnCount() > 0) {
-            itemsTable.getColumnModel().getColumn(0).setPreferredWidth(40);
-            itemsTable.getColumnModel().getColumn(0).setMinWidth(30);
-            itemsTable.getColumnModel().getColumn(0).setMaxWidth(80);
-            logger.trace("Ширину стовпця ID встановлено.");
-        }
-    }
-
+    /**
+     * Слухач змін у текстових полях для автоматичного оновлення даних.
+     */
     protected static class SimpleDocumentListener implements javax.swing.event.DocumentListener {
         private final Runnable updateAction;
-        public SimpleDocumentListener(Runnable updateAction) { this.updateAction = updateAction; }
-        @Override public void insertUpdate(javax.swing.event.DocumentEvent e) { updateAction.run(); }
-        @Override public void removeUpdate(javax.swing.event.DocumentEvent e) { updateAction.run(); }
-        @Override public void changedUpdate(javax.swing.event.DocumentEvent e) { updateAction.run(); }
+
+        public SimpleDocumentListener(Runnable updateAction) {
+            this.updateAction = updateAction;
+        }
+
+        @Override
+        public void insertUpdate(javax.swing.event.DocumentEvent e) {
+            updateAction.run();
+        }
+
+        @Override
+        public void removeUpdate(javax.swing.event.DocumentEvent e) {
+            updateAction.run();
+        }
+
+        @Override
+        public void changedUpdate(javax.swing.event.DocumentEvent e) {
+            updateAction.run();
+        }
     }
 }
