@@ -223,7 +223,7 @@ public class FlowerDAO {
      * @return об'єкт Flower
      * @throws SQLException якщо виникає помилка при роботі з ResultSet
      */
-    private Flower mapRowToFlower(ResultSet rs) throws SQLException {
+    Flower mapRowToFlower(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String typeName = rs.getString("type_name");
         double price = rs.getDouble("price");
@@ -255,7 +255,7 @@ public class FlowerDAO {
      * @param flower квітка, для якої потрібно встановити ID
      * @param id     ідентифікатор, який потрібно встановити
      */
-    private void setFlowerId(Flower flower, int id) {
+    void setFlowerId(Flower flower, int id) {
         try {
             java.lang.reflect.Field idField = Flower.class.getDeclaredField("id");
             idField.setAccessible(true);

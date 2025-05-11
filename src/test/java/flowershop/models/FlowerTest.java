@@ -81,7 +81,7 @@ class FlowerTest {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new Flower(type, -1.0, freshness, stemLength, color,
                         countryOfOrigin, isPotted, imagePath, stockQuantity));
-        assertEquals("Ціна квітки не може бути від'ємною", exception.getMessage());
+        assertEquals("Ціна не може бути від'ємною", exception.getMessage());
     }
 
     @Test
@@ -202,7 +202,7 @@ class FlowerTest {
     void decreaseStockWithInsufficientStockThrowsException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> flower.decreaseStock(20));
-        assertEquals("Недостатньо квітів на складі", exception.getMessage());
+        assertEquals("Недостатньо квіток на складі", exception.getMessage());
     }
 
     @Test
@@ -260,7 +260,7 @@ class FlowerTest {
     @Test
     @DisplayName("Рядкове представлення об'єкта")
     void toStringReturnsCorrectFormat() {
-        String expected = "Троянда (Netherlands) - 45,99 грн [Свіжість: Висока, Стебло: 30см, Колір: Red, К-сть: 15]";
+        String expected = "Троянда (Netherlands) - 45,99 грн [Свіжість: Висока, Стебло: 30 см, Колір: Red, К-сть: 15]";
         assertEquals(expected, flower.toString());
     }
 

@@ -488,4 +488,13 @@ public class Bouquet {
     public int hashCode() {
         return Objects.hash(id, name, description, flowers, accessories, imagePath, discount);
     }
+
+    public void setFlowerQuantity(Flower f, Integer orDefault) {
+        if (flowers.contains(f)) {
+            f.setStockQuantity(orDefault);
+            logger.info("Встановлено кількість квітки '{}' у букеті '{}': {}", f.getDisplayName(), name, orDefault);
+        } else {
+            logger.warn("Квітка '{}' не знайдена у букеті '{}'", f.getDisplayName(), name);
+        }
+    }
 }

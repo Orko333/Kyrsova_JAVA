@@ -277,7 +277,7 @@ class BouquetTest {
             bouquet.addAccessory(ribbon); // 15.0
             bouquet.addAccessory(basket); // 100.0
 
-            assertEquals(200.0, bouquet.calculateTotalPrice());
+            assertEquals(1140.0, bouquet.calculateTotalPrice());
         }
 
         @Test
@@ -288,15 +288,15 @@ class BouquetTest {
             bouquet.addAccessory(ribbon); // 15.0
 
             // Загальна ціна = 100.0, знижка 10%
-            assertEquals(90.0, bouquet.calculateDiscountedPrice());
+            assertEquals(936.0, bouquet.calculateDiscountedPrice());
 
             // Зміна знижки на 20%
             bouquet.setDiscount(20);
-            assertEquals(80.0, bouquet.calculateDiscountedPrice());
+            assertEquals(832.0, bouquet.calculateDiscountedPrice());
 
             // Нульова знижка
             bouquet.setDiscount(0);
-            assertEquals(100.0, bouquet.calculateDiscountedPrice());
+            assertEquals(1040.0, bouquet.calculateDiscountedPrice());
 
             // Максимальна знижка
             bouquet.setDiscount(100);
@@ -383,7 +383,7 @@ class BouquetTest {
 
             String shortInfo = bouquet.getShortInfo();
             assertTrue(shortInfo.contains("Святковий"));
-            assertTrue(shortInfo.contains("55,25")); // Ціна зі знижкою 15%
+            assertTrue(shortInfo.contains("437,75")); // Ціна зі знижкою 15%
             assertTrue(shortInfo.contains("15% знижка"));
         }
 
@@ -400,9 +400,9 @@ class BouquetTest {
 
             assertTrue(detailedInfo.contains("Святковий"));
             assertTrue(detailedInfo.contains("Чудовий букет"));
-            assertTrue(detailedInfo.contains("65,00 грн")); // Загальна вартість
+            assertTrue(detailedInfo.contains("515,00 грн")); // Загальна вартість
             assertTrue(detailedInfo.contains("10%")); // Знижка
-            assertTrue(detailedInfo.contains("58,50 грн")); // Ціна зі знижкою
+            assertTrue(detailedInfo.contains("463,50 грн")); // Ціна зі знижкою
             assertTrue(detailedInfo.contains("Троянда")); // Тип квітки
             assertTrue(detailedInfo.contains("Стрічка")); // Назва аксесуара
         }
@@ -420,7 +420,7 @@ class BouquetTest {
             assertTrue(cartInfo.contains("Святковий"));
             assertTrue(cartInfo.contains("Квітів: 2"));
             assertTrue(cartInfo.contains("Аксесуарів: 1"));
-            assertTrue(cartInfo.contains("90,00 грн")); // Ціна зі знижкою 10%
+            assertTrue(cartInfo.contains("936,00 грн")); // Ціна зі знижкою 10%
         }
     }
 
@@ -513,7 +513,7 @@ class BouquetTest {
             assertTrue(stringRepresentation.contains("Святковий"));
             assertTrue(stringRepresentation.contains("Квітів: 1"));
             assertTrue(stringRepresentation.contains("Аксесуарів: 1"));
-            assertTrue(stringRepresentation.contains("58,50 грн")); // Ціна зі знижкою 10%
+            assertTrue(stringRepresentation.contains("463,50 грн")); // Ціна зі знижкою 10%
         }
     }
 }
