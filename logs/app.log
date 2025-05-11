@@ -14732,3 +14732,422 @@ java.lang.NumberFormatException: For input string: "invalid"
 2025-05-11 14:35:18.452 [main] INFO  flowershop.gui.Dialog.AbstractAddEditDialog - Стилізована кнопка 'Скасувати' створена.
 2025-05-11 14:35:18.452 [main] INFO  flowershop.gui.Dialog.AbstractAddEditDialog - Базовий UI ініціалізовано успішно.
 2025-05-11 14:35:18.452 [main] INFO  flowershop.gui.Dialog.AddEditAccessoryDialog - Ініціалізація AddEditAccessoryDialog для нового аксесуара
+2025-05-11 16:31:12.956 [main] INFO  flowershop.FlowerShopApp - Запуск програми FlowerShopApp
+2025-05-11 16:31:13.020 [main] INFO  flowershop.FlowerShopApp - Програма FlowerShopApp завершила роботу
+2025-05-11 16:31:13.321 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Ініціалізація головного вікна FlowerShopApp
+2025-05-11 16:31:13.331 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Букети'
+2025-05-11 16:31:13.402 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: BouquetsTab. DAO: BouquetDAO
+2025-05-11 16:31:13.403 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління букетами'
+2025-05-11 16:31:13.434 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:31:13.586 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:31:13.674 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:31:13.683 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:31:13.683 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:31:13.684 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:31:13.684 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління букетами'.
+2025-05-11 16:31:13.962 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Створено букет 'LOL'. Квітів: 0, Аксесуарів: 0
+2025-05-11 16:31:14.011 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:31:14.022 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список квітів для букета 'LOL'. Кількість: 1
+2025-05-11 16:31:14.036 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:31:14.037 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список аксесуарів для букета 'LOL'. Кількість: 1
+2025-05-11 16:31:14.082 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління букетами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:31:14.082 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.BouquetsTab - Вкладка 'Управління букетами' ініціалізована. Додаткові DAO (Flower, Accessory) завантажено.
+2025-05-11 16:31:14.086 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Квіти'
+2025-05-11 16:31:14.101 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: FlowersTab. DAO: FlowerDAO
+2025-05-11 16:31:14.101 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління квітами'
+2025-05-11 16:31:14.102 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:31:14.198 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:31:14.208 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:31:14.209 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:31:14.209 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:31:14.209 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:31:14.209 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління квітами'.
+2025-05-11 16:31:14.218 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (Red)
+2025-05-11 16:31:14.219 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:31:14.219 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Yellow)
+2025-05-11 16:31:14.219 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Pink)
+2025-05-11 16:31:14.220 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (Purple)
+2025-05-11 16:31:14.220 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (White)
+2025-05-11 16:31:14.221 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Orange)
+2025-05-11 16:31:14.221 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Yellow)
+2025-05-11 16:31:14.221 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Blue)
+2025-05-11 16:31:14.221 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Pink)
+2025-05-11 16:31:14.221 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (С)
+2025-05-11 16:31:14.231 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління квітами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:31:14.231 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.FlowersTab - Вкладка 'Управління квітами' ініціалізована.
+2025-05-11 16:31:14.232 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Аксесуари'
+2025-05-11 16:31:14.234 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: AccessoriesTab. DAO: AccessoryDAO
+2025-05-11 16:31:14.234 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління аксесуарами'
+2025-05-11 16:31:14.234 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:31:14.256 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:31:14.261 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:31:14.261 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:31:14.263 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:31:14.263 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:31:14.263 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління аксесуарами'.
+2025-05-11 16:31:14.270 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Glass Vase'
+2025-05-11 16:31:14.270 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Red'
+2025-05-11 16:31:14.270 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Gold'
+2025-05-11 16:31:14.270 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:31:14.270 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Love'
+2025-05-11 16:31:14.270 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Teddy Bear'
+2025-05-11 16:31:14.271 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Basket'
+2025-05-11 16:31:14.271 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ceramic Pot'
+2025-05-11 16:31:14.271 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Plastic Wrap'
+2025-05-11 16:31:14.271 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ornamental Stick'
+2025-05-11 16:31:14.277 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління аксесуарами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:31:14.278 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AccessoriesTab - Вкладка 'Управління аксесуарами' ініціалізована.
+2025-05-11 16:31:14.296 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Головне вікно FlowerShopApp ініціалізовано
+2025-05-11 16:31:21.536 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Натиснуто кнопку 'Сортування'.
+2025-05-11 16:31:21.536 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AccessoriesTab - Показ діалогу сортування аксесуарів.
+2025-05-11 16:31:21.546 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.approveSelectionIcon. Кнопка 'Застосувати' буде без іконки.
+2025-05-11 16:31:21.548 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.cancelSelectionIcon. Кнопка 'Скасувати' буде без іконки.
+2025-05-11 16:31:29.436 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AccessoriesTab - Застосування сортування для AccessoriesTab: [javax.swing.RowSorter$SortKey@2a9a150]
+2025-05-11 16:31:30.569 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Натиснуто кнопку 'Сортування'.
+2025-05-11 16:31:30.569 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AccessoriesTab - Показ діалогу сортування аксесуарів.
+2025-05-11 16:31:30.571 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.approveSelectionIcon. Кнопка 'Застосувати' буде без іконки.
+2025-05-11 16:31:30.571 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.cancelSelectionIcon. Кнопка 'Скасувати' буде без іконки.
+2025-05-11 16:31:45.747 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Натиснуто кнопку 'Сортування'.
+2025-05-11 16:31:45.747 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.FlowersTab - Показ діалогу сортування квітів.
+2025-05-11 16:31:45.749 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.approveSelectionIcon. Кнопка 'Застосувати' буде без іконки.
+2025-05-11 16:31:45.751 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.cancelSelectionIcon. Кнопка 'Скасувати' буде без іконки.
+2025-05-11 16:31:51.689 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.FlowersTab - Застосування сортування для квітів: [javax.swing.RowSorter$SortKey@7ee894a1]
+2025-05-11 16:32:02.414 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Натиснуто кнопку 'Сортування'.
+2025-05-11 16:32:02.415 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.FlowersTab - Показ діалогу сортування квітів.
+2025-05-11 16:32:02.416 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.approveSelectionIcon. Кнопка 'Застосувати' буде без іконки.
+2025-05-11 16:32:02.417 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.cancelSelectionIcon. Кнопка 'Скасувати' буде без іконки.
+2025-05-11 16:32:27.142 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Натиснуто кнопку 'Експорт'.
+2025-05-11 16:32:27.142 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціювання експорту даних у CSV.
+2025-05-11 16:35:29.368 [main] INFO  flowershop.FlowerShopApp - Запуск програми FlowerShopApp
+2025-05-11 16:35:29.416 [main] INFO  flowershop.FlowerShopApp - Програма FlowerShopApp завершила роботу
+2025-05-11 16:35:29.575 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Ініціалізація головного вікна FlowerShopApp
+2025-05-11 16:35:29.582 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Букети'
+2025-05-11 16:35:29.630 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: BouquetsTab. DAO: BouquetDAO
+2025-05-11 16:35:29.630 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління букетами'
+2025-05-11 16:35:29.669 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:35:29.789 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:35:29.872 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:35:29.887 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:35:29.889 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:35:29.890 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:35:29.892 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління букетами'.
+2025-05-11 16:35:30.150 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Створено букет 'LOL'. Квітів: 0, Аксесуарів: 0
+2025-05-11 16:35:30.177 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:35:30.185 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список квітів для букета 'LOL'. Кількість: 1
+2025-05-11 16:35:30.197 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:35:30.198 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список аксесуарів для букета 'LOL'. Кількість: 1
+2025-05-11 16:35:30.247 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління букетами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:35:30.247 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.BouquetsTab - Вкладка 'Управління букетами' ініціалізована. Додаткові DAO (Flower, Accessory) завантажено.
+2025-05-11 16:35:30.249 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Квіти'
+2025-05-11 16:35:30.252 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: FlowersTab. DAO: FlowerDAO
+2025-05-11 16:35:30.252 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління квітами'
+2025-05-11 16:35:30.252 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:35:30.300 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:35:30.309 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:35:30.310 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:35:30.310 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:35:30.311 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:35:30.311 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління квітами'.
+2025-05-11 16:35:30.324 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (Red)
+2025-05-11 16:35:30.324 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:35:30.325 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Yellow)
+2025-05-11 16:35:30.325 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Pink)
+2025-05-11 16:35:30.325 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (Purple)
+2025-05-11 16:35:30.325 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (White)
+2025-05-11 16:35:30.325 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Orange)
+2025-05-11 16:35:30.325 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Yellow)
+2025-05-11 16:35:30.325 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Blue)
+2025-05-11 16:35:30.326 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Pink)
+2025-05-11 16:35:30.326 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (С)
+2025-05-11 16:35:30.336 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління квітами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:35:30.336 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.FlowersTab - Вкладка 'Управління квітами' ініціалізована.
+2025-05-11 16:35:30.336 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Аксесуари'
+2025-05-11 16:35:30.337 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: AccessoriesTab. DAO: AccessoryDAO
+2025-05-11 16:35:30.337 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління аксесуарами'
+2025-05-11 16:35:30.338 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:35:30.381 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:35:30.392 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:35:30.392 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:35:30.394 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:35:30.395 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:35:30.395 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління аксесуарами'.
+2025-05-11 16:35:30.402 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Glass Vase'
+2025-05-11 16:35:30.403 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Red'
+2025-05-11 16:35:30.403 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Gold'
+2025-05-11 16:35:30.403 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:35:30.403 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Love'
+2025-05-11 16:35:30.404 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Teddy Bear'
+2025-05-11 16:35:30.404 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Basket'
+2025-05-11 16:35:30.404 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ceramic Pot'
+2025-05-11 16:35:30.404 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Plastic Wrap'
+2025-05-11 16:35:30.404 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ornamental Stick'
+2025-05-11 16:35:30.411 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління аксесуарами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:35:30.412 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AccessoriesTab - Вкладка 'Управління аксесуарами' ініціалізована.
+2025-05-11 16:35:30.430 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Головне вікно FlowerShopApp ініціалізовано
+2025-05-11 16:36:40.560 [main] INFO  flowershop.FlowerShopApp - Запуск програми FlowerShopApp
+2025-05-11 16:36:40.597 [main] INFO  flowershop.FlowerShopApp - Програма FlowerShopApp завершила роботу
+2025-05-11 16:36:40.745 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Ініціалізація головного вікна FlowerShopApp
+2025-05-11 16:36:40.751 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Букети'
+2025-05-11 16:36:40.771 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: BouquetsTab. DAO: BouquetDAO
+2025-05-11 16:36:40.772 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління букетами'
+2025-05-11 16:36:40.797 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:36:40.897 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:36:40.956 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:36:40.960 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:36:40.961 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:36:40.961 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:36:40.964 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління букетами'.
+2025-05-11 16:36:41.214 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Створено букет 'LOL'. Квітів: 0, Аксесуарів: 0
+2025-05-11 16:36:41.240 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:36:41.249 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список квітів для букета 'LOL'. Кількість: 1
+2025-05-11 16:36:41.264 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:36:41.265 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список аксесуарів для букета 'LOL'. Кількість: 1
+2025-05-11 16:36:41.311 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління букетами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:36:41.311 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.BouquetsTab - Вкладка 'Управління букетами' ініціалізована. Додаткові DAO (Flower, Accessory) завантажено.
+2025-05-11 16:36:41.313 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Квіти'
+2025-05-11 16:36:41.315 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: FlowersTab. DAO: FlowerDAO
+2025-05-11 16:36:41.315 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління квітами'
+2025-05-11 16:36:41.316 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:36:41.364 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:36:41.374 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:36:41.375 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:36:41.375 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:36:41.375 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:36:41.375 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління квітами'.
+2025-05-11 16:36:41.387 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (Red)
+2025-05-11 16:36:41.388 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:36:41.388 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Yellow)
+2025-05-11 16:36:41.388 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Pink)
+2025-05-11 16:36:41.388 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (Purple)
+2025-05-11 16:36:41.388 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (White)
+2025-05-11 16:36:41.388 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Orange)
+2025-05-11 16:36:41.389 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Yellow)
+2025-05-11 16:36:41.389 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Blue)
+2025-05-11 16:36:41.389 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Pink)
+2025-05-11 16:36:41.389 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (С)
+2025-05-11 16:36:41.399 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління квітами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:36:41.400 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.FlowersTab - Вкладка 'Управління квітами' ініціалізована.
+2025-05-11 16:36:41.400 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Аксесуари'
+2025-05-11 16:36:41.402 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: AccessoriesTab. DAO: AccessoryDAO
+2025-05-11 16:36:41.402 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління аксесуарами'
+2025-05-11 16:36:41.402 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:36:41.426 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:36:41.433 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:36:41.434 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:36:41.434 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:36:41.434 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:36:41.434 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління аксесуарами'.
+2025-05-11 16:36:41.442 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Glass Vase'
+2025-05-11 16:36:41.442 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Red'
+2025-05-11 16:36:41.442 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Gold'
+2025-05-11 16:36:41.442 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:36:41.443 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Love'
+2025-05-11 16:36:41.443 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Teddy Bear'
+2025-05-11 16:36:41.443 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Basket'
+2025-05-11 16:36:41.443 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ceramic Pot'
+2025-05-11 16:36:41.443 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Plastic Wrap'
+2025-05-11 16:36:41.443 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ornamental Stick'
+2025-05-11 16:36:41.450 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління аксесуарами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:36:41.451 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AccessoriesTab - Вкладка 'Управління аксесуарами' ініціалізована.
+2025-05-11 16:36:41.470 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Головне вікно FlowerShopApp ініціалізовано
+2025-05-11 16:37:27.197 [main] INFO  flowershop.FlowerShopApp - Запуск програми FlowerShopApp
+2025-05-11 16:37:27.252 [main] INFO  flowershop.FlowerShopApp - Програма FlowerShopApp завершила роботу
+2025-05-11 16:37:27.419 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Ініціалізація головного вікна FlowerShopApp
+2025-05-11 16:37:27.425 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Букети'
+2025-05-11 16:37:27.451 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: BouquetsTab. DAO: BouquetDAO
+2025-05-11 16:37:27.451 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління букетами'
+2025-05-11 16:37:27.473 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:37:27.573 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:37:27.634 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:37:27.640 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:37:27.640 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:37:27.642 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:37:27.643 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління букетами'.
+2025-05-11 16:37:27.894 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Створено букет 'LOL'. Квітів: 0, Аксесуарів: 0
+2025-05-11 16:37:27.925 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:37:27.935 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список квітів для букета 'LOL'. Кількість: 1
+2025-05-11 16:37:27.947 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:37:27.947 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список аксесуарів для букета 'LOL'. Кількість: 1
+2025-05-11 16:37:27.995 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління букетами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:37:27.996 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.BouquetsTab - Вкладка 'Управління букетами' ініціалізована. Додаткові DAO (Flower, Accessory) завантажено.
+2025-05-11 16:37:27.997 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Квіти'
+2025-05-11 16:37:28.001 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: FlowersTab. DAO: FlowerDAO
+2025-05-11 16:37:28.001 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління квітами'
+2025-05-11 16:37:28.002 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:37:28.055 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:37:28.064 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:37:28.064 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:37:28.065 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:37:28.065 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:37:28.065 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління квітами'.
+2025-05-11 16:37:28.078 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (Red)
+2025-05-11 16:37:28.079 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:37:28.079 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Yellow)
+2025-05-11 16:37:28.079 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Pink)
+2025-05-11 16:37:28.079 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (Purple)
+2025-05-11 16:37:28.079 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (White)
+2025-05-11 16:37:28.080 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Orange)
+2025-05-11 16:37:28.080 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Yellow)
+2025-05-11 16:37:28.080 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Blue)
+2025-05-11 16:37:28.080 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Pink)
+2025-05-11 16:37:28.080 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (С)
+2025-05-11 16:37:28.092 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління квітами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:37:28.092 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.FlowersTab - Вкладка 'Управління квітами' ініціалізована.
+2025-05-11 16:37:28.092 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Аксесуари'
+2025-05-11 16:37:28.094 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: AccessoriesTab. DAO: AccessoryDAO
+2025-05-11 16:37:28.094 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління аксесуарами'
+2025-05-11 16:37:28.095 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:37:28.117 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:37:28.125 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:37:28.126 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:37:28.127 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:37:28.127 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:37:28.127 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління аксесуарами'.
+2025-05-11 16:37:28.135 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Glass Vase'
+2025-05-11 16:37:28.136 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Red'
+2025-05-11 16:37:28.136 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Gold'
+2025-05-11 16:37:28.136 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:37:28.136 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Love'
+2025-05-11 16:37:28.136 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Teddy Bear'
+2025-05-11 16:37:28.136 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Basket'
+2025-05-11 16:37:28.137 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ceramic Pot'
+2025-05-11 16:37:28.137 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Plastic Wrap'
+2025-05-11 16:37:28.137 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ornamental Stick'
+2025-05-11 16:37:28.147 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління аксесуарами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:37:28.147 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AccessoriesTab - Вкладка 'Управління аксесуарами' ініціалізована.
+2025-05-11 16:37:28.168 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Головне вікно FlowerShopApp ініціалізовано
+2025-05-11 16:45:21.698 [main] INFO  flowershop.FlowerShopApp - Запуск програми FlowerShopApp
+2025-05-11 16:45:21.772 [main] INFO  flowershop.FlowerShopApp - Програма FlowerShopApp завершила роботу
+2025-05-11 16:45:21.961 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Ініціалізація головного вікна FlowerShopApp
+2025-05-11 16:45:21.971 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Букети'
+2025-05-11 16:45:21.996 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: BouquetsTab. DAO: BouquetDAO
+2025-05-11 16:45:21.996 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління букетами'
+2025-05-11 16:45:22.039 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:45:22.191 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:45:22.282 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:45:22.289 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:45:22.289 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:45:22.290 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:45:22.292 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління букетами'.
+2025-05-11 16:45:22.549 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Створено букет 'LOL'. Квітів: 0, Аксесуарів: 0
+2025-05-11 16:45:22.585 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:45:22.603 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список квітів для букета 'LOL'. Кількість: 1
+2025-05-11 16:45:22.621 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:45:22.623 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список аксесуарів для букета 'LOL'. Кількість: 1
+2025-05-11 16:45:22.693 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління букетами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:45:22.693 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.BouquetsTab - Вкладка 'Управління букетами' ініціалізована.
+2025-05-11 16:45:22.696 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Квіти'
+2025-05-11 16:45:22.699 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: FlowersTab. DAO: FlowerDAO
+2025-05-11 16:45:22.699 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління квітами'
+2025-05-11 16:45:22.700 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:45:22.761 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:45:22.771 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:45:22.772 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:45:22.773 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:45:22.773 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:45:22.773 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління квітами'.
+2025-05-11 16:45:22.779 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (Red)
+2025-05-11 16:45:22.780 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 16:45:22.780 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Yellow)
+2025-05-11 16:45:22.780 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Pink)
+2025-05-11 16:45:22.780 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (Purple)
+2025-05-11 16:45:22.780 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (White)
+2025-05-11 16:45:22.781 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Orange)
+2025-05-11 16:45:22.781 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Yellow)
+2025-05-11 16:45:22.781 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Blue)
+2025-05-11 16:45:22.781 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Pink)
+2025-05-11 16:45:22.781 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (С)
+2025-05-11 16:45:22.791 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління квітами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:45:22.793 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.FlowersTab - Вкладка 'Управління квітами' ініціалізована.
+2025-05-11 16:45:22.793 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Аксесуари'
+2025-05-11 16:45:22.795 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: AccessoriesTab. DAO: AccessoryDAO
+2025-05-11 16:45:22.795 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління аксесуарами'
+2025-05-11 16:45:22.796 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 16:45:22.828 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 16:45:22.836 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 16:45:22.837 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 16:45:22.837 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 16:45:22.837 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 16:45:22.839 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Оновлення даних у таблиці для вкладки 'Управління аксесуарами'.
+2025-05-11 16:45:22.846 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Glass Vase'
+2025-05-11 16:45:22.847 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Red'
+2025-05-11 16:45:22.847 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Gold'
+2025-05-11 16:45:22.847 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 16:45:22.847 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Love'
+2025-05-11 16:45:22.848 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Teddy Bear'
+2025-05-11 16:45:22.849 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Basket'
+2025-05-11 16:45:22.850 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ceramic Pot'
+2025-05-11 16:45:22.850 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Plastic Wrap'
+2025-05-11 16:45:22.850 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ornamental Stick'
+2025-05-11 16:45:22.858 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління аксесуарами' успішно ініціалізовано. Початкові дані завантажено.
+2025-05-11 16:45:22.858 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AccessoriesTab - Вкладка 'Управління аксесуарами' ініціалізована.
+2025-05-11 16:45:22.889 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Головне вікно FlowerShopApp ініціалізовано
+2025-05-11 17:07:31.408 [main] INFO  flowershop.FlowerShopApp - Запуск програми FlowerShopApp
+2025-05-11 17:07:31.472 [main] INFO  flowershop.FlowerShopApp - Програма FlowerShopApp завершила роботу
+2025-05-11 17:07:31.745 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Ініціалізація головного вікна FlowerShopApp
+2025-05-11 17:07:31.753 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Букети'
+2025-05-11 17:07:31.818 [AWT-EventQueue-0] FATAL flowershop.database.DatabaseManager - Файл конфігурації /database.properties не знайдено.
+2025-05-11 17:09:25.182 [main] INFO  flowershop.FlowerShopApp - Запуск програми FlowerShopApp
+2025-05-11 17:09:25.226 [main] INFO  flowershop.FlowerShopApp - Програма FlowerShopApp завершила роботу
+2025-05-11 17:09:25.344 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Ініціалізація головного вікна FlowerShopApp
+2025-05-11 17:09:25.351 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Букети'
+2025-05-11 17:09:25.398 [AWT-EventQueue-0] INFO  flowershop.database.DatabaseManager - Конфігурацію бази даних успішно завантажено з /database.properties.
+2025-05-11 17:09:25.438 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: BouquetsTab. DAO: BouquetDAO
+2025-05-11 17:09:25.438 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління букетами'
+2025-05-11 17:09:25.502 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 17:09:25.811 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 17:09:25.958 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 17:09:26.006 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 17:09:26.006 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 17:09:26.010 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 17:09:26.381 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Створено букет 'LOL'. Квітів: 0, Аксесуарів: 0
+2025-05-11 17:09:26.414 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 17:09:26.429 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список квітів для букета 'LOL'. Кількість: 1
+2025-05-11 17:09:26.444 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 17:09:26.446 [AWT-EventQueue-0] INFO  flowershop.models.Bouquet - Встановлено новий список аксесуарів для букета 'LOL'. Кількість: 1
+2025-05-11 17:09:26.498 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління букетами' успішно ініціалізовано.
+2025-05-11 17:09:26.498 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.BouquetsTab - Вкладка 'Управління букетами' ініціалізована.
+2025-05-11 17:09:26.502 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Квіти'
+2025-05-11 17:09:26.506 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: FlowersTab. DAO: FlowerDAO
+2025-05-11 17:09:26.506 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління квітами'
+2025-05-11 17:09:26.507 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 17:09:26.620 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 17:09:26.630 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 17:09:26.630 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 17:09:26.630 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 17:09:26.631 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 17:09:26.640 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (Red)
+2025-05-11 17:09:26.641 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (White)
+2025-05-11 17:09:26.641 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Yellow)
+2025-05-11 17:09:26.641 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Лілія' (Pink)
+2025-05-11 17:09:26.641 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (Purple)
+2025-05-11 17:09:26.642 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Тюльпан' (White)
+2025-05-11 17:09:26.642 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Orange)
+2025-05-11 17:09:26.642 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Хризантема' (Yellow)
+2025-05-11 17:09:26.642 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Blue)
+2025-05-11 17:09:26.642 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Орхідея' (Pink)
+2025-05-11 17:09:26.642 [AWT-EventQueue-0] INFO  flowershop.models.Flower - Створено квітку 'Троянда' (С)
+2025-05-11 17:09:26.654 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління квітами' успішно ініціалізовано.
+2025-05-11 17:09:26.654 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.FlowersTab - Вкладка 'Управління квітами' ініціалізована.
+2025-05-11 17:09:26.654 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Додавання вкладки 'Аксесуари'
+2025-05-11 17:09:26.656 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Створення вкладки типу: AccessoriesTab. DAO: AccessoryDAO
+2025-05-11 17:09:26.657 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Ініціалізація базового UI для вкладки 'Управління аксесуарами'
+2025-05-11 17:09:26.657 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.floppyDriveIcon. Кнопка 'Експорт' буде без іконки.
+2025-05-11 17:09:26.686 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка не знайдена для ключа: FileChooser.deleteIcon. Кнопка 'Очистити' буде без іконки.
+2025-05-11 17:09:26.695 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <<
+2025-05-11 17:09:26.695 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.leftArrowIcon. Використовується текст: <
+2025-05-11 17:09:26.696 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >
+2025-05-11 17:09:26.696 [AWT-EventQueue-0] WARN  flowershop.gui.Tab.AbstractItemTab - Стандартна іконка пагінації не знайдена для ключа: SplitPane.rightArrowIcon. Використовується текст: >>
+2025-05-11 17:09:26.708 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Glass Vase'
+2025-05-11 17:09:26.709 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Red'
+2025-05-11 17:09:26.709 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Gift Ribbon Gold'
+2025-05-11 17:09:26.709 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Birthday'
+2025-05-11 17:09:26.710 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Greeting Card - Love'
+2025-05-11 17:09:26.710 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Teddy Bear'
+2025-05-11 17:09:26.710 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Basket'
+2025-05-11 17:09:26.710 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ceramic Pot'
+2025-05-11 17:09:26.710 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Plastic Wrap'
+2025-05-11 17:09:26.710 [AWT-EventQueue-0] INFO  flowershop.models.Accessory - Створено аксесуар 'Ornamental Stick'
+2025-05-11 17:09:26.721 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AbstractItemTab - Базовий UI для вкладки 'Управління аксесуарами' успішно ініціалізовано.
+2025-05-11 17:09:26.721 [AWT-EventQueue-0] INFO  flowershop.gui.Tab.AccessoriesTab - Вкладка 'Управління аксесуарами' ініціалізована.
+2025-05-11 17:09:26.751 [AWT-EventQueue-0] INFO  flowershop.FlowerShopApp - Головне вікно FlowerShopApp ініціалізовано

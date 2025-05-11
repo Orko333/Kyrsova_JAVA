@@ -6,45 +6,49 @@ import org.apache.logging.log4j.Logger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
- * Клас DatabaseManager реалізує паттерн Singleton для керування підключеннями до бази даних.
- * Він забезпечує створення, отримання та закриття з'єднань з базою даних MySQL.
+ * Клас для керування підключеннями до бази даних MySQL з використанням паттерну Singleton.
+ * Забезпечує безпечне підключення до бази даних, завантаження конфігурації з файлу
+ * та належне закриття з'єднань.
  */
 public class DatabaseManager {
-    // Ініціалізація логера для цього класу
+
     private static final Logger logger = LogManager.getLogger(DatabaseManager.class);
-
-    // URL для підключення до бази даних MySQL
-    private static final String URL = "jdbc:mysql://localhost:3306/flower_shop?useSSL=false&serverTimezone=UTC";
-    // Ім'я користувача для підключення до бази даних
-    private static final String USERNAME = "root";
-    // Пароль для підключення до бази даних (замінити на дійсний пароль або краще використовувати безпечніші методи зберігання)
-    private static final String PASSWORD = "Karatist2006"; // УВАГА: Зберігання паролів у коді є небезпечним!
-
-    // Єдиний екземпляр класу (Singleton)
+    private static final String CONFIG_FILE = "/database.properties";
     private static DatabaseManager instance;
+    private final Properties dbConfig;
 
     /**
-     * Приватний конструктор для запобігання створенню екземплярів класу ззовні.
-     * Використовується для реалізації паттерну Singleton.
+     * Приватний конструктор для реалізації Singleton.
+     * Завантажує конфігурацію бази даних із файлу properties.
      */
     private DatabaseManager() {
-        // Пустий конструктор
-        logger.debug("Ініціалізація екземпляра DatabaseManager (Singleton).");
+        dbConfig = new Properties();
+        try (InputStream input = DatabaseManager.class.getResourceAsStream(CONFIG_FILE)) {
+            if (input == null) {
+                logger.fatal("Файл конфігурації {} не знайдено.", CONFIG_FILE);
+                throw new IllegalStateException("Файл конфігурації " + CONFIG_FILE + " не знайдено.");
+            }
+            dbConfig.load(input);
+            logger.info("Конфігурацію бази даних успішно завантажено з {}.", CONFIG_FILE);
+        } catch (IOException e) {
+            logger.fatal("Помилка завантаження конфігурації бази даних: {}", e.getMessage(), e);
+            throw new IllegalStateException("Помилка завантаження конфігурації бази даних", e);
+        }
     }
 
     /**
-     * Метод для отримання єдиного екземпляра класу DatabaseManager (Singleton).
+     * Отримує єдиний екземпляр класу DatabaseManager (Singleton).
      *
-     * @return Єдиний екземпляр DatabaseManager.
+     * @return єдиний екземпляр DatabaseManager
      */
     public static synchronized DatabaseManager getInstance() {
         if (instance == null) {
-            logger.info("Створення нового екземпляра DatabaseManager.");
             instance = new DatabaseManager();
-        } else {
-            logger.trace("Повернення існуючого екземпляра DatabaseManager.");
         }
         return instance;
     }
@@ -52,43 +56,44 @@ public class DatabaseManager {
     /**
      * Встановлює та повертає підключення до бази даних.
      *
-     * @return Об'єкт Connection для роботи з базою даних.
-     * @throws SQLException Виникає у випадку помилки підключення до бази даних.
+     * @return об'єкт Connection для роботи з базою даних
+     * @throws SQLException якщо виникає помилка підключення до бази даних
      */
     public Connection getConnection() throws SQLException {
-        logger.info("Спроба отримати з'єднання з базою даних: URL='{}', User='{}'", URL, USERNAME);
+        String url = dbConfig.getProperty("db.url");
+        String username = dbConfig.getProperty("db.username");
+        String password = dbConfig.getProperty("db.password");
+
+        if (url == null || username == null || password == null) {
+            logger.fatal("Відсутні необхідні параметри конфігурації бази даних.");
+            throw new IllegalStateException("Відсутні необхідні параметри конфігурації бази даних.");
+        }
+
         try {
-            Connection connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
-            logger.info("З'єднання з базою даних успішно встановлено. Connection ID: {}", connection.hashCode()); // hashCode для простої ідентифікації
+            Connection connection = DriverManager.getConnection(url, username, password);
+            logger.debug("Підключення до бази даних успішно встановлено: {}", url);
             return connection;
         } catch (SQLException e) {
-            logger.fatal("КРИТИЧНА ПОМИЛКА: Не вдалося підключитися до бази даних! URL='{}', User='{}': {}", URL, USERNAME, e.getMessage(), e);
-            // Кидаємо виняток далі, щоб викликаючий код міг його обробити
+            logger.fatal("Не вдалося підключитися до бази даних: URL='{}', User='{}': {}", url, username, e.getMessage(), e);
             throw e;
         }
     }
 
     /**
-     * Закриває вказане підключення до бази даних.
+     * Закриває підключення до бази даних.
      *
-     * @param connection Підключення, яке необхідно закрити.
+     * @param connection підключення, яке необхідно закрити
      */
     public void closeConnection(Connection connection) {
         if (connection != null) {
-            int connectionId = connection.hashCode(); // Отримуємо ID перед закриттям для логування
-            logger.trace("Спроба закрити з'єднання з ID: {}", connectionId);
             try {
-                if (!connection.isClosed()) { // Перевіряємо, чи з'єднання ще не закрите
+                if (!connection.isClosed()) {
                     connection.close();
-                    logger.info("З'єднання з ID {} успішно закрито.", connectionId);
-                } else {
-                    logger.warn("Спроба закрити вже закрите з'єднання з ID: {}", connectionId);
+                    logger.debug("Підключення до бази даних успішно закрито.");
                 }
             } catch (SQLException e) {
-                logger.error("Помилка при закритті з'єднання з ID {}: {}", connectionId, e.getMessage(), e);
+                logger.error("Помилка при закритті з'єднання: {}", e.getMessage(), e);
             }
-        } else {
-            logger.warn("Спроба закрити null з'єднання.");
         }
     }
 }

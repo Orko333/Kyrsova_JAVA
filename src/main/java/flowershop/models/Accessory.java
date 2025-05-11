@@ -6,39 +6,26 @@ import org.apache.logging.log4j.Logger;
 import java.util.Objects;
 
 /**
- * Клас Accessory представляє аксесуари, які можна додати до букетів у квітковому магазині.
+ * Клас Accessory моделює аксесуари для букетів у квітковому магазині.
  * Містить інформацію про назву, ціну, тип, опис, колір, розмір, кількість на складі та шлях до зображення.
  */
 public class Accessory {
 
     private static final Logger logger = LogManager.getLogger(Accessory.class);
 
-    /**
-     * Конструктор копіювання — створює новий об'єкт на основі іншого аксесуара.
-     *
-     * @param accessoryToEdit Аксесуар, з якого копіюються дані.
-     */
-    public Accessory(Accessory accessoryToEdit) {
-        logger.debug("Створення копії аксесуара: {}", accessoryToEdit.getName());
-        this.name = accessoryToEdit.name;
-        this.price = accessoryToEdit.price;
-        this.description = accessoryToEdit.description;
-        this.imagePath = accessoryToEdit.imagePath;
-        this.stockQuantity = accessoryToEdit.stockQuantity;
-        this.type = accessoryToEdit.type;
-        this.color = accessoryToEdit.color;
-        this.size = accessoryToEdit.size;
-        this.id = accessoryToEdit.id; // Додано копіювання id
-        logger.info("Створено копію аксесуара '{}'", this.name);
-    }
-
-    public void setId(int i) {
-        logger.trace("Встановлення ID {} для аксесуара '{}'", i, this.name);
-        this.id = i;
-    }
+    // --- Поля класу ---
+    private String name;
+    private double price;
+    private String description;
+    private String imagePath;
+    private int stockQuantity;
+    private int id;
+    private AccessoryType type;
+    private String color;
+    private String size;
 
     /**
-     * Перелічення можливих типів аксесуарів.
+     * Перелік можливих типів аксесуарів.
      */
     public enum AccessoryType {
         WRAPPING_PAPER("Папір для упаковки"),
@@ -60,62 +47,32 @@ public class Accessory {
         }
 
         /**
-         * Повертає відображувану назву типу.
+         * Повертає відображувану назву типу аксесуара.
          *
-         * @return Назва типу аксесуара.
+         * @return Назва типу
          */
         public String getDisplayName() {
             return displayName;
         }
     }
 
-    // Поля класу
-    private String name;
-    private double price;
-    private String description;
-    private String imagePath;
-    private int stockQuantity;
-    private int id;
-    private AccessoryType type;
-    private String color;
-    private String size;
+    // --- Конструктори ---
 
     /**
-     * Спрощений конструктор з мінімальними параметрами.
+     * Повний конструктор для створення аксесуара з усіма параметрами.
      *
-     * @param name Назва аксесуара.
-     * @param price Ціна аксесуара.
-     * @param type Тип аксесуара.
-     */
-    public Accessory(String name, double price, AccessoryType type) {
-        this(name, price, "", "", 0, type, "", "");
-        logger.debug("Створення аксесуара '{}' (спрощений конструктор)", name);
-    }
-
-    /**
-     * Повний конструктор аксесуара з усіма параметрами.
-     *
-     * @param name Назва аксесуара.
-     * @param price Ціна.
-     * @param description Опис.
-     * @param imagePath Шлях до зображення.
-     * @param stockQuantity Кількість на складі.
-     * @param type Тип аксесуара.
-     * @param color Колір.
-     * @param size Розмір.
+     * @param name          Назва аксесуара
+     * @param price         Ціна аксесуара
+     * @param description   Опис аксесуара
+     * @param imagePath     Шлях до зображення
+     * @param stockQuantity Кількість на складі
+     * @param type          Тип аксесуара
+     * @param color         Колір аксесуара
+     * @param size          Розмір аксесуара
      */
     public Accessory(String name, double price, String description, String imagePath,
                      int stockQuantity, AccessoryType type, String color, String size) {
-        logger.debug("Спроба створення аксесуара: Ім'я='{}', Ціна={}, Тип='{}'", name, price, type);
-        if (price < 0) {
-            logger.error("Спроба встановити від'ємну ціну ({}) для аксесуара '{}'", price, name);
-            throw new IllegalArgumentException("Ціна аксесуара не може бути від'ємною");
-        }
-        if (stockQuantity < 0) {
-            logger.error("Спроба встановити від'ємну кількість ({}) на складі для аксесуара '{}'", stockQuantity, name);
-            throw new IllegalArgumentException("Кількість на складі не може бути від'ємною");
-        }
-
+        validateInputs(price, stockQuantity);
         this.name = Objects.requireNonNull(name, "Назва аксесуара не може бути null");
         this.price = price;
         this.description = Objects.requireNonNull(description, "Опис аксесуара не може бути null");
@@ -124,124 +81,185 @@ public class Accessory {
         this.type = Objects.requireNonNull(type, "Тип аксесуара не може бути null");
         this.color = Objects.requireNonNull(color, "Колір аксесуара не може бути null");
         this.size = Objects.requireNonNull(size, "Розмір аксесуара не може бути null");
-        logger.info("Аксесуар '{}' успішно створено.", this.name);
+        logger.info("Створено аксесуар '{}'", name);
     }
 
-    // Гетери і сетери з перевірками
+    /**
+     * Спрощений конструктор з базовими параметрами.
+     *
+     * @param name  Назва аксесуара
+     * @param price Ціна аксесуара
+     * @param type  Тип аксесуара
+     */
+    public Accessory(String name, double price, AccessoryType type) {
+        this(name, price, "", "", 0, type, "", "");
+    }
+
+    /**
+     * Конструктор копіювання для створення копії іншого аксесуара.
+     *
+     * @param accessory Аксесуар для копіювання
+     */
+    public Accessory(Accessory accessory) {
+        this(accessory.name, accessory.price, accessory.description, accessory.imagePath,
+                accessory.stockQuantity, accessory.type, accessory.color, accessory.size);
+        this.id = accessory.id;
+        logger.info("Створено копію аксесуара '{}'", accessory.name);
+    }
+
+    // --- Гетери ---
 
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        logger.trace("Встановлення назви '{}' для аксесуара (стара назва: '{}')", name, this.name);
-        this.name = Objects.requireNonNull(name, "Назва аксесуара не може бути null");
     }
 
     public double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
-        logger.trace("Встановлення ціни {} для аксесуара '{}' (стара ціна: {})", price, this.name, this.price);
-        if (price < 0) {
-            logger.error("Спроба встановити від'ємну ціну ({}) для аксесуара '{}'", price, this.name);
-            throw new IllegalArgumentException("Ціна аксесуара не може бути від'ємною");
-        }
-        this.price = price;
-    }
-
     public String getDescription() {
         return description;
-    }
-
-    public void setDescription(String description) {
-        logger.trace("Встановлення опису для аксесуара '{}'", this.name);
-        this.description = Objects.requireNonNull(description, "Опис аксесуара не може бути null");
     }
 
     public String getImagePath() {
         return imagePath;
     }
 
-    public void setImagePath(String imagePath) {
-        logger.trace("Встановлення шляху до зображення '{}' для аксесуара '{}'", imagePath, this.name);
-        this.imagePath = Objects.requireNonNull(imagePath, "Шлях до зображення не може бути null");
-    }
-
     public int getStockQuantity() {
         return stockQuantity;
     }
 
-    public void setStockQuantity(int stockQuantity) {
-        logger.trace("Встановлення кількості на складі {} для аксесуара '{}' (стара кількість: {})", stockQuantity, this.name, this.stockQuantity);
-        if (stockQuantity < 0) {
-            logger.error("Спроба встановити від'ємну кількість ({}) на складі для аксесуара '{}'", stockQuantity, this.name);
-            throw new IllegalArgumentException("Кількість на складі не може бути від'ємною");
-        }
-        this.stockQuantity = stockQuantity;
+    public int getId() {
+        return id;
     }
 
     public AccessoryType getType() {
         return type;
     }
 
-    public void setType(AccessoryType type) {
-        logger.trace("Встановлення типу '{}' для аксесуара '{}' (старий тип: '{}')", type, this.name, this.type);
-        this.type = Objects.requireNonNull(type, "Тип аксесуара не може бути null");
-    }
-
     public String getColor() {
         return color;
-    }
-
-    public void setColor(String color) {
-        logger.trace("Встановлення кольору '{}' для аксесуара '{}' (старий колір: '{}')", color, this.name, this.color);
-        this.color = Objects.requireNonNull(color, "Колір аксесуара не може бути null");
     }
 
     public String getSize() {
         return size;
     }
 
+    // --- Сетери ---
+
+    public void setName(String name) {
+        this.name = Objects.requireNonNull(name, "Назва аксесуара не може бути null");
+    }
+
+    public void setPrice(double price) {
+        if (price < 0) {
+            throw new IllegalArgumentException("Ціна не може бути від'ємною");
+        }
+        this.price = price;
+    }
+
+    public void setDescription(String description) {
+        this.description = Objects.requireNonNull(description, "Опис аксесуара не може бути null");
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = Objects.requireNonNull(imagePath, "Шлях до зображення не може бути null");
+    }
+
+    public void setStockQuantity(int stockQuantity) {
+        if (stockQuantity < 0) {
+            throw new IllegalArgumentException("Кількість на складі не може бути від'ємною");
+        }
+        this.stockQuantity = stockQuantity;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setType(AccessoryType type) {
+        this.type = Objects.requireNonNull(type, "Тип аксесуара не може бути null");
+    }
+
+    public void setColor(String color) {
+        this.color = Objects.requireNonNull(color, "Колір аксесуара не може бути null");
+    }
+
     public void setSize(String size) {
-        logger.trace("Встановлення розміру '{}' для аксесуара '{}' (старий розмір: '{}')", size, this.name, this.size);
         this.size = Objects.requireNonNull(size, "Розмір аксесуара не може бути null");
     }
 
+    // --- Бізнес-логіка ---
+
     /**
-     * Зменшує кількість товару на складі.
+     * Зменшує кількість аксесуарів на складі.
      *
-     * @param quantity Кількість для зменшення.
+     * @param quantity Кількість для зменшення
+     * @throws IllegalArgumentException Якщо кількість від'ємна або перевищує наявну
      */
     public void decreaseStock(int quantity) {
-        logger.debug("Зменшення кількості аксесуара '{}' на {} (поточна кількість: {})", this.name, quantity, this.stockQuantity);
         if (quantity < 0) {
-            logger.warn("Спроба зменшити кількість на складі на від'ємне значення ({}) для аксесуара '{}'", quantity, this.name);
             throw new IllegalArgumentException("Кількість для зменшення не може бути від'ємною");
         }
         if (quantity > stockQuantity) {
-            logger.error("Недостатня кількість аксесуарів '{}' на складі (запит: {}, наявнo: {})", this.name, quantity, this.stockQuantity);
-            throw new IllegalArgumentException("Недостатня кількість аксесуарів на складі");
+            throw new IllegalArgumentException("Недостатньо аксесуарів на складі");
         }
         stockQuantity -= quantity;
-        logger.info("Кількість аксесуара '{}' зменшено на {}. Нова кількість: {}", this.name, quantity, this.stockQuantity);
+        logger.info("Кількість аксесуара '{}' зменшено на {}. Нова кількість: {}", name, quantity, stockQuantity);
     }
 
     /**
-     * Збільшує кількість товару на складі.
+     * Збільшує кількість аксесуарів на складі.
      *
-     * @param quantity Кількість для збільшення.
+     * @param quantity Кількість для збільшення
+     * @throws IllegalArgumentException Якщо кількість від'ємна
      */
     public void increaseStock(int quantity) {
-        logger.debug("Збільшення кількості аксесуара '{}' на {} (поточна кількість: {})", this.name, quantity, this.stockQuantity);
         if (quantity < 0) {
-            logger.warn("Спроба збільшити кількість на складі на від'ємне значення ({}) для аксесуара '{}'", quantity, this.name);
             throw new IllegalArgumentException("Кількість для збільшення не може бути від'ємною");
         }
         stockQuantity += quantity;
-        logger.info("Кількість аксесуара '{}' збільшено на {}. Нова кількість: {}", this.name, quantity, this.stockQuantity);
+        logger.info("Кількість аксесуара '{}' збільшено на {}. Нова кількість: {}", name, quantity, stockQuantity);
     }
+
+    // --- Методи для відображення ---
+
+    /**
+     * Повертає коротку інформацію про аксесуар.
+     *
+     * @return Рядок з назвою, типом і ціною
+     */
+    public String getShortInfo() {
+        return String.format("%s (%s) - %.2f грн", name, type.getDisplayName(), price);
+    }
+
+    /**
+     * Повертає детальну інформацію про аксесуар у форматі HTML.
+     *
+     * @return Рядок з детальною інформацією
+     */
+    public String getDetailedInfo() {
+        return String.format(
+                "<html><b>Назва:</b> %s<br>" +
+                        "<b>Тип:</b> %s<br>" +
+                        "<b>Ціна:</b> %.2f грн<br>" +
+                        "<b>Колір:</b> %s<br>" +
+                        "<b>Розмір:</b> %s<br>" +
+                        "<b>На складі:</b> %d<br>" +
+                        "<b>Опис:</b> %s</html>",
+                name, type.getDisplayName(), price, color, size, stockQuantity, description);
+    }
+
+    /**
+     * Повертає інформацію для відображення в кошику.
+     *
+     * @return Рядок з назвою, кольором, розміром і ціною
+     */
+    public String getCartInfo() {
+        return String.format("%s (%s, %s) - %.2f грн", name, color, size, price);
+    }
+
+    // --- Перевизначення методів Object ---
 
     @Override
     public String toString() {
@@ -254,66 +272,36 @@ public class Accessory {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Accessory accessory = (Accessory) o;
-        boolean result = Double.compare(accessory.price, price) == 0 &&
+        return id == accessory.id &&
+                Double.compare(accessory.price, price) == 0 &&
                 stockQuantity == accessory.stockQuantity &&
-                id == accessory.id && // Додано порівняння id
                 name.equals(accessory.name) &&
-                Objects.equals(description, accessory.description) && // Додано Objects.equals для можливості null
-                Objects.equals(imagePath, accessory.imagePath) && // Додано Objects.equals
+                Objects.equals(description, accessory.description) &&
+                Objects.equals(imagePath, accessory.imagePath) &&
                 type == accessory.type &&
-                Objects.equals(color, accessory.color) && // Додано Objects.equals
-                Objects.equals(size, accessory.size); // Додано Objects.equals
-        logger.trace("Порівняння аксесуара '{}' з {}: результат {}", this.name, accessory.getName(), result);
-        return result;
+                Objects.equals(color, accessory.color) &&
+                Objects.equals(size, accessory.size);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, price, description, imagePath, stockQuantity, type, color, size, id); // Додано id
+        return Objects.hash(id, name, price, description, imagePath, stockQuantity, type, color, size);
     }
 
-    /**
-     * Повертає коротку інформацію для списків.
-     *
-     * @return Короткий опис аксесуара.
-     */
-    public String getShortInfo() {
-        return String.format("%s (%s) - %.2f грн", name, type.getDisplayName(), price);
-    }
+    // --- Приватні методи ---
 
     /**
-     * Повертає повну інформацію про аксесуар у форматі HTML.
+     * Перевіряє коректність вхідних параметрів конструктора.
      *
-     * @return HTML-рядок із детальною інформацією.
+     * @param price        Ціна
+     * @param stockQuantity Кількість на складі
      */
-    public String getDetailedInfo() {
-        return String.format(
-                "<html><b>Назва:</b> %s<br>" +
-                        "<b>Тип:</b> %s<br>" +
-                        "<b>Ціна:</b> %.2f грн<br>" +
-                        "<b>Колір:</b> %s<br>" +
-                        "<b>Розмір:</b> %s<br>" +
-                        "<b>На складі:</b> %d<br>" +
-                        "<b>Опис:</b> %s</html>",
-                name, type.getDisplayName(), price, color, size, stockQuantity, description
-        );
-    }
-
-    /**
-     * Повертає короткий рядок для відображення в кошику замовлення.
-     *
-     * @return Рядок з інформацією для кошика.
-     */
-    public String getCartInfo() {
-        return String.format("%s (%s, %s) - %.2f грн", name, color, size, price);
-    }
-
-    /**
-     * Повертає ідентифікатор аксесуара.
-     *
-     * @return id аксесуара.
-     */
-    public int getId() {
-        return id;
+    private void validateInputs(double price, int stockQuantity) {
+        if (price < 0) {
+            throw new IllegalArgumentException("Ціна не може бути від'ємною");
+        }
+        if (stockQuantity < 0) {
+            throw new IllegalArgumentException("Кількість на складі не може бути від'ємною");
+        }
     }
 }

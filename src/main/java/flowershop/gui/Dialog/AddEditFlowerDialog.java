@@ -15,16 +15,15 @@ import java.io.File;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-
 /**
  * Діалогове вікно для додавання або редагування інформації про квітку.
- * Успадковує функціонал від AbstractAddEditDialog.
+ * Дозволяє вводити та редагувати дані про тип, ціну, свіжість, довжину стебла, колір, країну походження,
+ * статус горщика, кількість на складі та зображення квітки.
  */
 public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
 
     private static final Logger logger = LogManager.getLogger(AddEditFlowerDialog.class);
 
-    // Поля форми, специфічні для квітки
     private JComboBox<FlowerType> typeCombo;
     private JTextField priceField;
     private JSlider freshnessSlider;
@@ -34,30 +33,35 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
     private JTextField countryField;
     private JCheckBox pottedCheckBox;
     private JTextField stockQuantityField;
-    // imagePathField, browseButton, okButton, cancelButton, previewImageLabel - успадковані
 
+    /**
+     * Конструктор діалогового вікна.
+     *
+     * @param parent        батьківське вікно
+     * @param flowerToEdit  квітка для редагування (null, якщо створюється нова)
+     */
     public AddEditFlowerDialog(JFrame parent, Flower flowerToEdit) {
         super(parent, flowerToEdit == null ? "Додати квітку" : "Редагувати квітку", flowerToEdit);
-        logger.info("Ініціалізація AddEditFlowerDialog для {}", flowerToEdit == null ? "нової квітки" : "редагування квітки ID: " + (flowerToEdit != null ? flowerToEdit.getId() : "N/A"));
-
         if (this.item != null) {
-            logger.debug("Заповнення полів для редагованої квітки.");
             populateFields();
         }
         pack();
         setMinimumSize(new Dimension(550, 620));
         setLocationRelativeTo(parent);
         setResizable(true);
-        logger.debug("Розміри та позиція AddEditFlowerDialog встановлені.");
-        SwingUtilities.invokeLater(() -> {
-            typeCombo.requestFocusInWindow();
-            logger.trace("Фокус встановлено на typeCombo.");
-        });
+        SwingUtilities.invokeLater(() -> typeCombo.requestFocusInWindow());
+        logger.info("Діалогове вікно {} відкрито.", flowerToEdit == null ? "додавання" : "редагування");
     }
 
+    // Формування UI
+
+    /**
+     * Створює панель форми для введення даних про квітку.
+     *
+     * @return панель із компонентами форми
+     */
     @Override
     protected JPanel createFormPanel() {
-        logger.debug("Створення панелі форми для AddEditFlowerDialog.");
         JPanel formPanel = new JPanel(new GridBagLayout());
         formPanel.setBackground(BACKGROUND_COLOR);
         Border outerBorder = BorderFactory.createTitledBorder(
@@ -74,16 +78,53 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
         gbc.insets = new Insets(6, 6, 6, 6);
         gbc.anchor = GridBagConstraints.WEST;
 
+        addTypeField(formPanel, gbc);
+        addPriceField(formPanel, gbc);
+        addFreshnessField(formPanel, gbc);
+        addStemLengthField(formPanel, gbc);
+        addColorField(formPanel, gbc);
+        addCountryField(formPanel, gbc);
+        addStockQuantityField(formPanel, gbc);
+        addPottedField(formPanel, gbc);
+        addImageField(formPanel, gbc);
+
+        setupEnterNavigation(typeCombo, priceField, stemLengthField, colorField, countryField, stockQuantityField, pottedCheckBox);
+        return formPanel;
+    }
+
+    /**
+     * Додає поле для вибору типу квітки.
+     *
+     * @param formPanel панель форми
+     * @param gbc       конфігурація GridBagConstraints
+     */
+    private void addTypeField(JPanel formPanel, GridBagConstraints gbc) {
         typeCombo = new JComboBox<>(FlowerType.values());
         typeCombo.setRenderer(new FlowerTypeRenderer());
         typeCombo.setFont(DEFAULT_FONT);
         typeCombo.setBackground(Color.WHITE);
         addFormField(formPanel, "Тип квітки:", typeCombo, gbc, 0, 1, GridBagConstraints.HORIZONTAL);
+    }
 
+    /**
+     * Додає поле для введення ціни.
+     *
+     * @param formPanel панель форми
+     * @param gbc       конфігурація GridBagConstraints
+     */
+    private void addPriceField(JPanel formPanel, GridBagConstraints gbc) {
         priceField = createStyledTextField(10);
         addFormField(formPanel, "Ціна (грн):", priceField, gbc, 1, 1, GridBagConstraints.HORIZONTAL);
+    }
 
-        JPanel freshnessPanel = new JPanel(new BorderLayout(5,0));
+    /**
+     * Додає поле для вибору рівня свіжості.
+     *
+     * @param formPanel панель форми
+     * @param gbc       конфігурація GridBagConstraints
+     */
+    private void addFreshnessField(JPanel formPanel, GridBagConstraints gbc) {
+        JPanel freshnessPanel = new JPanel(new BorderLayout(5, 0));
         freshnessPanel.setOpaque(false);
         freshnessSlider = new JSlider(0, 100, 75);
         freshnessSlider.setMajorTickSpacing(25);
@@ -101,29 +142,78 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
         freshnessPanel.add(freshnessSlider, BorderLayout.CENTER);
         freshnessPanel.add(freshnessValueLabel, BorderLayout.EAST);
         addFormField(formPanel, "Свіжість:", freshnessPanel, gbc, 2, 1, GridBagConstraints.HORIZONTAL);
+    }
 
-
+    /**
+     * Додає поле для введення довжини стебла.
+     *
+     * @param formPanel панель форми
+     * @param gbc       конфігурація GridBagConstraints
+     */
+    private void addStemLengthField(JPanel formPanel, GridBagConstraints gbc) {
         stemLengthField = createStyledTextField(10);
         addFormField(formPanel, "Довжина стебла (см):", stemLengthField, gbc, 3, 1, GridBagConstraints.HORIZONTAL);
+    }
 
+    /**
+     * Додає поле для введення кольору.
+     *
+     * @param formPanel панель форми
+     * @param gbc       конфігурація GridBagConstraints
+     */
+    private void addColorField(JPanel formPanel, GridBagConstraints gbc) {
         colorField = createStyledTextField(15);
-        // setupAutoComplete(colorField, COLORS_SUGGESTIONS); // Видалено автодоповнення
         addFormField(formPanel, "Колір:", colorField, gbc, 4, 1, GridBagConstraints.HORIZONTAL);
+    }
 
+    /**
+     * Додає поле для введення країни походження.
+     *
+     * @param formPanel панель форми
+     * @param gbc       конфігурація GridBagConstraints
+     */
+    private void addCountryField(JPanel formPanel, GridBagConstraints gbc) {
         countryField = createStyledTextField(15);
-        // setupAutoComplete(countryField, COUNTRIES_SUGGESTIONS); // Видалено автодоповнення
         addFormField(formPanel, "Країна походження:", countryField, gbc, 5, 1, GridBagConstraints.HORIZONTAL);
+    }
 
+    /**
+     * Додає поле для введення кількості на складі.
+     *
+     * @param formPanel панель форми
+     * @param gbc       конфігурація GridBagConstraints
+     */
+    private void addStockQuantityField(JPanel formPanel, GridBagConstraints gbc) {
         stockQuantityField = createStyledTextField(10);
         addFormField(formPanel, "Кількість на складі:", stockQuantityField, gbc, 6, 1, GridBagConstraints.HORIZONTAL);
+    }
 
+    /**
+     * Додає прапорець для вказівки, чи є квітка в горщику.
+     *
+     * @param formPanel панель форми
+     * @param gbc       конфігурація GridBagConstraints
+     */
+    private void addPottedField(JPanel formPanel, GridBagConstraints gbc) {
         pottedCheckBox = new JCheckBox("В горщику");
         pottedCheckBox.setFont(DEFAULT_FONT);
         pottedCheckBox.setOpaque(false);
-        gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 2; gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0;
+        gbc.gridy = 7;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
         formPanel.add(pottedCheckBox, gbc);
-        gbc.anchor = GridBagConstraints.WEST; gbc.gridwidth = 1;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.gridwidth = 1;
+    }
 
+    /**
+     * Додає поле для вибору зображення квітки.
+     *
+     * @param formPanel панель форми
+     * @param gbc       конфігурація GridBagConstraints
+     */
+    private void addImageField(JPanel formPanel, GridBagConstraints gbc) {
         JPanel imagePanel = new JPanel(new BorderLayout(0, 5));
         imagePanel.setOpaque(false);
         imagePanel.setBorder(BorderFactory.createTitledBorder(
@@ -132,15 +222,26 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
         imagePathField = createStyledTextField(20);
         imagePathField.setEditable(false);
         imagePathField.getDocument().addDocumentListener(new DocumentListener() {
-            public void insertUpdate(DocumentEvent e) { updatePreviewImage(imagePathField.getText()); }
-            public void removeUpdate(DocumentEvent e) { updatePreviewImage(imagePathField.getText()); }
-            public void changedUpdate(DocumentEvent e) { updatePreviewImage(imagePathField.getText()); }
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                updatePreviewImage(imagePathField.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                updatePreviewImage(imagePathField.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                updatePreviewImage(imagePathField.getText());
+            }
         });
 
         browseButton = createStyledButton("Огляд...", null);
         browseButton.addActionListener(e -> browseImageAction());
 
-        JPanel imagePathControlsPanel = new JPanel(new BorderLayout(5,0));
+        JPanel imagePathControlsPanel = new JPanel(new BorderLayout(5, 0));
         imagePathControlsPanel.setOpaque(false);
         imagePathControlsPanel.add(imagePathField, BorderLayout.CENTER);
         imagePathControlsPanel.add(browseButton, BorderLayout.EAST);
@@ -155,38 +256,34 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
         previewScrollPane.setBorder(null);
         imagePanel.add(previewScrollPane, BorderLayout.CENTER);
 
-        gbc.gridx = 0; gbc.gridy = 8; gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.BOTH; gbc.weighty = 0.4;
+        gbc.gridx = 0;
+        gbc.gridy = 8;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weighty = 0.4;
         formPanel.add(imagePanel, gbc);
-
-        setupEnterNavigation(typeCombo, priceField, stemLengthField, colorField, countryField, stockQuantityField, pottedCheckBox);
-        logger.info("Панель форми для AddEditFlowerDialog успішно створена.");
-        return formPanel;
     }
 
+    /**
+     * Оновлює колір мітки рівня свіжості залежно від значення слайдера.
+     */
     private void updateFreshnessLabelColor() {
         int value = freshnessSlider.getValue();
         FreshnessLevel level = FreshnessLevel.fromValue(value);
-        logger.trace("Оновлення кольору мітки свіжості. Значення: {}, Рівень: {}", value, level);
         switch (level) {
-            case VERY_LOW:
-            case LOW:
-                freshnessValueLabel.setForeground(Color.RED.darker());
-                break;
-            case MEDIUM:
-                freshnessValueLabel.setForeground(Color.ORANGE.darker());
-                break;
-            case HIGH:
-            case VERY_HIGH:
-                freshnessValueLabel.setForeground(PRIMARY_COLOR.darker());
-                break;
+            case VERY_LOW, LOW -> freshnessValueLabel.setForeground(Color.RED.darker());
+            case MEDIUM -> freshnessValueLabel.setForeground(Color.ORANGE.darker());
+            case HIGH, VERY_HIGH -> freshnessValueLabel.setForeground(PRIMARY_COLOR.darker());
         }
     }
 
+    // Заповнення полів
 
+    /**
+     * Заповнює поля форми даними квітки, якщо редагується існуюча квітка.
+     */
     @Override
     protected void populateFields() {
-        logger.debug("Заповнення полів форми даними квітки.");
         if (item != null) {
             typeCombo.setSelectedItem(item.getType());
             priceField.setText(String.format("%.2f", item.getPrice()).replace(',', '.'));
@@ -198,16 +295,19 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
             pottedCheckBox.setSelected(item.isPotted());
             stockQuantityField.setText(String.valueOf(item.getStockQuantity()));
             imagePathField.setText(item.getImagePath());
-            updatePreviewImage(item.getImagePath()); // Важливо для показу прев'ю при редагуванні
-            logger.info("Поля форми заповнені для квітки типу: {}, колір: {}", item.getType(), item.getColor());
-        } else {
-            logger.warn("Спроба заповнити поля, але 'item' (квітка) є null.");
+            updatePreviewImage(item.getImagePath());
         }
     }
 
+    // Збереження даних
+
+    /**
+     * Зберігає введені дані у об'єкт квітки.
+     *
+     * @return true, якщо збереження успішне, інакше false
+     */
     @Override
     protected boolean saveItem() {
-        logger.debug("Спроба зберегти квітку.");
         try {
             FlowerType type = (FlowerType) typeCombo.getSelectedItem();
             String priceStr = priceField.getText().replace(',', '.').trim();
@@ -219,9 +319,7 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
             String stockStr = stockQuantityField.getText().trim();
             String imagePath = imagePathField.getText().trim();
 
-            logger.trace("Дані з форми: Тип='{}', Ціна='{}', Свіжість='{}', Стебло='{}', Колір='{}', Країна='{}', В горщику='{}', К-сть='{}', Зображення='{}'",
-                    type, priceStr, freshness, stemStr, color, country, isPotted, stockStr, imagePath);
-
+            // Валідація полів
             if (type == null) {
                 showErrorDialog("Необхідно вибрати тип квітки.");
                 typeCombo.requestFocusInWindow();
@@ -271,7 +369,6 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
                 return false;
             }
             if (!imagePath.isEmpty() && !new File(imagePath).isFile()) {
-                logger.warn("Файл зображення за шляхом '{}' не знайдено або це не файл.", imagePath);
                 if (JOptionPane.showConfirmDialog(this,
                         "Файл зображення за вказаним шляхом не знайдено або це не файл.\nПродовжити збереження без зображення (або з поточним, якщо є)?",
                         "Попередження: Зображення",
@@ -281,11 +378,10 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
                 }
             }
 
+            // Збереження даних
             if (item == null) {
-                logger.info("Створення нової квітки.");
                 item = new Flower(type, price, freshness, stemLength, color, country, isPotted, imagePath, stockQuantity);
             } else {
-                logger.info("Оновлення існуючої квітки ID: {}", item.getId());
                 item.setType(type);
                 item.setPrice(price);
                 item.setFreshness(freshness);
@@ -296,30 +392,36 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
                 item.setStockQuantity(stockQuantity);
                 item.setImagePath(imagePath);
             }
-            logger.info("Квітка '{} {}' успішно підготовлена до збереження.", item.getColor(), item.getType().getDisplayName());
+            logger.info("Квітка успішно збережена: {}", item.getType().getDisplayName());
             return true;
         } catch (NumberFormatException ex) {
-            logger.error("Помилка формату числа при збереженні квітки: {}", ex.getMessage(), ex);
             showErrorDialog("Будь ласка, введіть коректні числові значення для ціни, довжини стебла та кількості.");
+            logger.error("Помилка формату чисел: {}", ex.getMessage());
             return false;
         } catch (Exception ex) {
-            logger.error("Непередбачена помилка при збереженні квітки: {}", ex.getMessage(), ex);
             showErrorDialog("Сталася помилка: " + ex.getMessage());
+            logger.error("Помилка збереження квітки: {}", ex.getMessage());
             return false;
         }
     }
 
+    /**
+     * Повертає об'єкт квітки.
+     *
+     * @return збережена або редагована квітка
+     */
     public Flower getFlower() {
-        logger.debug("Запит на отримання об'єкта Flower. Поточний item: {} {}",
-                item != null ? item.getColor() : "null",
-                item != null ? item.getType().getDisplayName() : "");
         return item;
     }
 
+    // Рендерери
+
+    /**
+     * Рендерер для відображення типів квіток у випадаючому списку.
+     */
     public static class FlowerTypeRenderer extends DefaultListCellRenderer {
         @Override
-        public Component getListCellRendererComponent(JList<?> list, Object value,
-                                                      int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value instanceof FlowerType) {
                 label.setText(((FlowerType) value).getDisplayName());
@@ -334,13 +436,16 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
             return label;
         }
     }
+
+    /**
+     * Рендерер для відображення рівнів свіжості у випадаючому списку.
+     */
     public static class FreshRenderer extends DefaultListCellRenderer {
         @Override
-        public Component getListCellRendererComponent(JList<?> list, Object value,
-                                                      int index, boolean isSelected, boolean cellHasFocus) {
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            if (value instanceof Flower.FreshnessLevel) {
-                label.setText(((Flower.FreshnessLevel) value).getDescription());
+            if (value instanceof FreshnessLevel) {
+                label.setText(((FreshnessLevel) value).getDescription());
             }
             if (isSelected) {
                 label.setBackground(PRIMARY_COLOR.darker());
