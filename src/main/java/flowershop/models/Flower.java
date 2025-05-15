@@ -25,7 +25,7 @@ public class Flower {
     private int stockQuantity;
 
     /**
-     * Перелік типів квітів з українськими назвами для відображення.
+     * Перелік типів квітів з назвами для відображення.
      */
     public enum FlowerType {
         ROSE("Троянда"),

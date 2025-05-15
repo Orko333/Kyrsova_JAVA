@@ -169,7 +169,6 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         addButton = createStyledButton("Додати", "FileChooser.newFolderIcon");
         editButton = createStyledButton("Редагувати", null);
         deleteButton = createStyledButton("Видалити", "InternalFrame.closeIcon");
-        exportButton = createStyledButton("Експорт", "FileChooser.floppyDriveIcon");
 
         toolBar.add(addButton);
         toolBar.addSeparator(new Dimension(5, 0));
@@ -177,13 +176,10 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
         toolBar.addSeparator(new Dimension(5, 0));
         toolBar.add(deleteButton);
         toolBar.addSeparator(new Dimension(15, 0));
-        toolBar.add(exportButton);
-        toolBar.addSeparator(new Dimension(5, 0));
 
         addButton.addActionListener(e -> showAddEditDialog(e));
         editButton.addActionListener(e -> showAddEditDialog(e));
         deleteButton.addActionListener(e -> deleteSelectedItem(e));
-        exportButton.addActionListener(e -> exportData(e));
 
         return toolBar;
     }
@@ -628,84 +624,6 @@ public abstract class AbstractItemTab<T, D> extends JPanel {
             stockLevelBar.setString("0 шт.");
             stockLevelBar.setForeground(PRIMARY_COLOR);
         }
-    }
-
-    // Експорт даних
-
-    /**
-     * Експортує дані таблиці у CSV-файл.
-     *
-     * @param e подія, що викликала експорт
-     */
-    protected void exportData(ActionEvent e) {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Експорт даних у CSV");
-        fileChooser.setFileFilter(new FileNameExtensionFilter("CSV файли (*.csv)", "csv"));
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-
-        if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            if (!file.getName().toLowerCase().endsWith(".csv")) {
-                file = new File(file.getAbsolutePath() + ".csv");
-            }
-
-            File finalFile = file;
-            SwingWorker<Void, Integer> worker = new SwingWorker<>() {
-                @Override
-                protected Void doInBackground() throws Exception {
-                    StringBuilder csv = new StringBuilder();
-                    String[] columns = getColumnNames();
-                    for (int i = 0; i < columns.length; i++) {
-                        csv.append(escapeCSV(columns[i]));
-                        if (i < columns.length - 1) csv.append(",");
-                    }
-                    csv.append("\n");
-
-                    List<T> itemsToExport = getAllItemsFromDAO();
-                    for (T item : itemsToExport) {
-                        Object[] rowData = getRowDataForItem(item);
-                        for (int j = 0; j < rowData.length; j++) {
-                            csv.append(escapeCSV(rowData[j] != null ? rowData[j].toString() : ""));
-                            if (j < rowData.length - 1) csv.append(",");
-                        }
-                        csv.append("\n");
-                    }
-                    java.nio.file.Files.writeString(finalFile.toPath(), csv.toString(), java.nio.charset.StandardCharsets.UTF_8);
-                    return null;
-                }
-
-                @Override
-                protected void done() {
-                    try {
-                        get();
-                        JOptionPane.showMessageDialog(AbstractItemTab.this,
-                                "Дані успішно експортовано до:\n" + finalFile.getAbsolutePath(),
-                                "Експорт завершено", JOptionPane.INFORMATION_MESSAGE);
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(AbstractItemTab.this,
-                                "Помилка при експорті даних: " + ex.getMessage(),
-                                "Помилка експорту", JOptionPane.ERROR_MESSAGE);
-                        logger.error("Помилка під час експорту даних: {}", ex.getMessage());
-                    }
-                }
-            };
-            worker.execute();
-        }
-    }
-
-    /**
-     * Екранує значення для коректного запису у CSV-файл.
-     *
-     * @param value значення для екранування
-     * @return екрановане значення
-     */
-    protected String escapeCSV(String value) {
-        if (value == null) return "";
-        String result = value.replace("\"", "\"\"");
-        if (result.contains(",") || result.contains("\"") || result.contains("\n") || result.contains("\r")) {
-            result = "\"" + result + "\"";
-        }
-        return result;
     }
 
     /**

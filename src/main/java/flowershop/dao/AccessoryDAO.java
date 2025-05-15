@@ -219,7 +219,7 @@ public class AccessoryDAO {
      * @return об'єкт Accessory
      * @throws SQLException якщо виникає помилка при роботі з ResultSet
      */
-    private Accessory mapRowToAccessory(ResultSet rs) throws SQLException {
+    Accessory mapRowToAccessory(ResultSet rs) throws SQLException {
         int id = rs.getInt("id");
         String typeName = rs.getString("type_name");
         String name = rs.getString("name");
@@ -249,7 +249,7 @@ public class AccessoryDAO {
      * @param accessory аксесуар, для якого потрібно встановити ID
      * @param id        ідентифікатор, який потрібно встановити
      */
-    private void setAccessoryId(Accessory accessory, int id) {
+    void setAccessoryId(Accessory accessory, int id) {
         try {
             java.lang.reflect.Field idField = Accessory.class.getDeclaredField("id");
             idField.setAccessible(true);

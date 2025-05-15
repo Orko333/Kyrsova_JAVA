@@ -23,13 +23,13 @@ public class AddEditAccessoryDialog extends AbstractAddEditDialog<Accessory> {
 
     private static final Logger logger = LogManager.getLogger(AddEditAccessoryDialog.class);
 
-    private JTextField nameField;
-    private JComboBox<AccessoryType> typeCombo;
-    private JTextField priceField;
-    private JTextField colorField;
-    private JTextField sizeField;
-    private JTextField stockQuantityField;
-    private JTextArea descriptionArea;
+    JTextField nameField;
+    JComboBox<AccessoryType> typeCombo;
+    JTextField priceField;
+    JTextField colorField;
+    JTextField sizeField;
+    JTextField stockQuantityField;
+    JTextArea descriptionArea;
 
     /**
      * Конструктор діалогового вікна.

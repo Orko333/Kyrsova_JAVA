@@ -46,16 +46,6 @@ public class SimpleDocumentListener implements DocumentListener {
         logger.debug("Створено слухача з Runnable callback");
     }
 
-    /**
-     * Створює слухача з обробником змін тексту.
-     *
-     * @param changeHandler Обробник змін тексту
-     */
-    public SimpleDocumentListener(TextChangeHandler changeHandler) {
-        this.callback = null;
-        this.changeHandler = changeHandler;
-        logger.debug("Створено слухача з TextChangeHandler");
-    }
 
     // --- Реалізація DocumentListener ---
 
@@ -93,97 +83,5 @@ public class SimpleDocumentListener implements DocumentListener {
         } catch (Exception ex) {
             logger.error("Помилка обробки зміни документа: {}", ex.getMessage(), ex);
         }
-    }
-
-    // --- Статичні методи ---
-
-    /**
-     * Оновлює текст у документі без виклику подій слухачів.
-     *
-     * @param doc  Документ для оновлення
-     * @param text Новий текст
-     */
-    public static void updateTextSilently(Document doc, String text) {
-        if (doc instanceof PlainDocument plainDoc) {
-            DocumentListener[] listeners = plainDoc.getDocumentListeners();
-            for (DocumentListener listener : listeners) {
-                plainDoc.removeDocumentListener(listener);
-            }
-            try {
-                plainDoc.remove(0, plainDoc.getLength());
-                plainDoc.insertString(0, text, null);
-                logger.debug("Текст оновлено беззвучно: '{}'", text);
-            } catch (Exception e) {
-                logger.error("Помилка оновлення тексту в PlainDocument: {}", e.getMessage(), e);
-            } finally {
-                for (DocumentListener listener : listeners) {
-                    plainDoc.addDocumentListener(listener);
-                }
-            }
-        } else {
-            logger.warn("Документ не є PlainDocument: {}. Оновлення може викликати події", doc.getClass().getName());
-            try {
-                doc.remove(0, doc.getLength());
-                doc.insertString(0, text, null);
-            } catch (Exception e) {
-                logger.error("Помилка оновлення тексту в документі {}: {}", doc.getClass().getName(), e.getMessage(), e);
-            }
-        }
-    }
-
-    /**
-     * Створює слухача, який дозволяє вводити лише цифри.
-     *
-     * @return Слухача з числовим фільтром
-     */
-    public static SimpleDocumentListener createNumericFilter() {
-        return new SimpleDocumentListener((doc, text) -> {
-            if (!text.matches("\\d*")) {
-                String filteredText = text.replaceAll("[^\\d]", "");
-                updateTextSilently(doc, filteredText);
-                logger.debug("Фільтр чисел: текст '{}' змінено на '{}'", text, filteredText);
-            }
-        });
-    }
-
-    /**
-     * Створює слухача, який дозволяє вводити лише десяткові числа (з однією крапкою).
-     *
-     * @return Слухача з десятковим фільтром
-     */
-    public static SimpleDocumentListener createDecimalFilter() {
-        return new SimpleDocumentListener((doc, text) -> {
-            if (!text.matches("^\\d*\\.?\\d*$")) {
-                String filteredText = text.replaceAll("[^\\d.]", "");
-                int firstDot = filteredText.indexOf('.');
-                if (firstDot != -1) {
-                    String beforeDot = filteredText.substring(0, firstDot + 1);
-                    String afterDot = filteredText.substring(firstDot + 1).replaceAll("\\.", "");
-                    filteredText = beforeDot + afterDot;
-                }
-                updateTextSilently(doc, filteredText);
-                logger.debug("Фільтр десяткових чисел: текст '{}' змінено на '{}'", text, filteredText);
-            }
-        });
-    }
-
-    /**
-     * Створює слухача, який обмежує довжину введеного тексту.
-     *
-     * @param maxLength Максимальна довжина тексту
-     * @return Слухача з обмеженням довжини
-     * @throws IllegalArgumentException Якщо maxLength від'ємний
-     */
-    public static SimpleDocumentListener createLengthLimiter(int maxLength) {
-        if (maxLength < 0) {
-            throw new IllegalArgumentException("Максимальна довжина не може бути від'ємною");
-        }
-        return new SimpleDocumentListener((doc, text) -> {
-            if (text.length() > maxLength) {
-                String limitedText = text.substring(0, maxLength);
-                updateTextSilently(doc, limitedText);
-                logger.debug("Обмеження довжини: текст '{}' обрізано до '{}'", text, limitedText);
-            }
-        });
     }
 }

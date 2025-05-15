@@ -24,15 +24,15 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
 
     private static final Logger logger = LogManager.getLogger(AddEditFlowerDialog.class);
 
-    private JComboBox<FlowerType> typeCombo;
-    private JTextField priceField;
-    private JSlider freshnessSlider;
-    private JLabel freshnessValueLabel;
-    private JTextField stemLengthField;
-    private JTextField colorField;
-    private JTextField countryField;
-    private JCheckBox pottedCheckBox;
-    private JTextField stockQuantityField;
+    JComboBox<FlowerType> typeCombo;
+    JTextField priceField;
+    JSlider freshnessSlider;
+    JLabel freshnessValueLabel;
+    JTextField stemLengthField;
+    JTextField colorField;
+    JTextField countryField;
+    JCheckBox pottedCheckBox;
+    JTextField stockQuantityField;
 
     /**
      * Конструктор діалогового вікна.
@@ -267,7 +267,7 @@ public class AddEditFlowerDialog extends AbstractAddEditDialog<Flower> {
     /**
      * Оновлює колір мітки рівня свіжості залежно від значення слайдера.
      */
-    private void updateFreshnessLabelColor() {
+    void updateFreshnessLabelColor() {
         int value = freshnessSlider.getValue();
         FreshnessLevel level = FreshnessLevel.fromValue(value);
         switch (level) {

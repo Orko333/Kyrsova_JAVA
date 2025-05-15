@@ -9,7 +9,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * DAO (Data Access Object) для роботи з букетами у базі даних.
@@ -114,12 +116,19 @@ public class BouquetDAO {
                 clearBouquetFlowers(conn, bouquetId);
                 clearBouquetAccessories(conn, bouquetId);
 
+                Map<Integer, Integer> flowerQuantities = new HashMap<>();
                 for (Flower flower : bouquet.getFlowers()) {
                     if (flower == null || flower.getId() <= 0) {
                         logger.warn("Пропущено null-квітку або квітку без ID для букета ID {}.", bouquetId);
                         continue;
                     }
-                    if (!insertBouquetFlower(conn, bouquetId, flower.getId(), 1)) {
+                    flowerQuantities.put(flower.getId(), flowerQuantities.getOrDefault(flower.getId(), 0) + 1); // Або використовуйте quantity з об'єкта квітки, якщо воно там зберігається
+                }
+
+                for (Map.Entry<Integer, Integer> entry : flowerQuantities.entrySet()) {
+                    int flowerId = entry.getKey();
+                    int quantity = entry.getValue(); // Це буде загальна кількість цієї квітки в букеті
+                    if (!insertBouquetFlower(conn, bouquetId, flowerId, quantity)) { // Передаємо реальну кількість
                         conn.rollback();
                         return false;
                     }
@@ -317,25 +326,31 @@ public class BouquetDAO {
      * @param bouquet букет, для якого завантажуються квіти
      * @throws SQLException якщо виникає помилка при роботі з базою даних
      */
-    private void loadBouquetFlowers(Connection conn, Bouquet bouquet) throws SQLException {
+    void loadBouquetFlowers(Connection conn, Bouquet bouquet) throws SQLException {
         if (bouquet == null) {
             logger.warn("Спроба завантажити квіти для null-букета.");
             return;
         }
-        String sql = "SELECT bf.flower_id FROM bouquet_flowers bf WHERE bf.bouquet_id = ?";
+        String sql = "SELECT bf.flower_id, bf.quantity FROM bouquet_flowers bf WHERE bf.bouquet_id = ?";
+        List<Flower> flowersList = new ArrayList<>();
+
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, bouquet.getId());
             try (ResultSet rs = pstmt.executeQuery()) {
-                List<Flower> flowers = new ArrayList<>();
                 while (rs.next()) {
-                    Flower flower = flowerDAO.getFlowerById(rs.getInt("flower_id"));
-                    if (flower != null) {
-                        flowers.add(flower);
+                    int flowerId = rs.getInt("flower_id");
+                    int quantityInDb = rs.getInt("quantity");
+
+                    Flower flowerTemplate = flowerDAO.getFlowerById(flowerId);
+                    if (flowerTemplate != null) {
+                        for (int i = 0; i < quantityInDb; i++) {
+                            flowersList.add(new Flower(flowerTemplate));
+                        }
                     } else {
-                        logger.warn("Квітка з ID {} не знайдена для букета ID {}.", rs.getInt("flower_id"), bouquet.getId());
+                        logger.warn("Квітка з ID {} не знайдена для букета ID {}.", flowerId, bouquet.getId());
                     }
                 }
-                bouquet.setFlowers(flowers);
+                bouquet.setFlowers(flowersList);
             }
         }
     }
@@ -347,7 +362,7 @@ public class BouquetDAO {
      * @param bouquet букет, для якого завантажуються аксесуари
      * @throws SQLException якщо виникає помилка при роботі з базою даних
      */
-    private void loadBouquetAccessories(Connection conn, Bouquet bouquet) throws SQLException {
+    void loadBouquetAccessories(Connection conn, Bouquet bouquet) throws SQLException {
         if (bouquet == null) {
             logger.warn("Спроба завантажити аксесуари для null-букета.");
             return;

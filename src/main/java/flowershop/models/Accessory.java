@@ -35,10 +35,10 @@ public class Accessory {
         DECORATIVE_MESH("Декоративна сітка"),
         PEARLS("Перлини"),
         FEATHERS("Пір'я"),
-        OTHER("Інше"),
         BOW("Бант"),
         BOX("Коробка"),
-        DECORATION("Прикраса");
+        DECORATION("Прикраса"),
+        OTHER("Інше");
 
         private final String displayName;
 

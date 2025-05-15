@@ -25,11 +25,13 @@ public class FlowersTab extends AbstractItemTab<Flower, FlowerDAO> {
 
     private static final Logger logger = LogManager.getLogger(FlowersTab.class);
 
-    private JComboBox<FlowerType> typeFilterCombo;
-    private JComboBox<FreshnessLevel> freshnessFilterCombo;
-    private JSpinner minPriceSpinner, maxPriceSpinner;
-    private JSpinner minStemSpinner, maxStemSpinner;
-    private JCheckBox pottedCheckBox;
+    JComboBox<FlowerType> typeFilterCombo;
+    JComboBox<FreshnessLevel> freshnessFilterCombo;
+    JSpinner minPriceSpinner;
+    JSpinner maxPriceSpinner;
+    JSpinner minStemSpinner;
+    JSpinner maxStemSpinner;
+    JCheckBox pottedCheckBox;
 
     /**
      * Конструктор вкладки для керування квітами.
@@ -386,7 +388,7 @@ public class FlowersTab extends AbstractItemTab<Flower, FlowerDAO> {
      *
      * @param flowerId ідентифікатор квітки
      */
-    private void selectRowByFlowerId(int flowerId) {
+    void selectRowByFlowerId(int flowerId) {
         for (int i = 0; i < itemsTable.getRowCount(); i++) {
             int modelRow = itemsTable.convertRowIndexToModel(i);
             if (modelRow >= 0 && modelRow < tableModel.getRowCount()) {

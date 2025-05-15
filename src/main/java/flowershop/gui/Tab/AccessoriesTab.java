@@ -383,7 +383,7 @@ public class AccessoriesTab extends AbstractItemTab<Accessory, AccessoryDAO> {
      *
      * @param accessoryId ідентифікатор аксесуара
      */
-    private void selectRowByAccessoryId(int accessoryId) {
+    void selectRowByAccessoryId(int accessoryId) {
         for (int i = 0; i < itemsTable.getRowCount(); i++) {
             int modelRow = itemsTable.convertRowIndexToModel(i);
             if (modelRow >= 0 && modelRow < tableModel.getRowCount()) {
@@ -539,7 +539,7 @@ public class AccessoriesTab extends AbstractItemTab<Accessory, AccessoryDAO> {
     /**
      * Рендерер для відображення типів аксесуарів у випадаючому списку.
      */
-    private static class AccessoryTypeRenderer extends DefaultListCellRenderer {
+    static class AccessoryTypeRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);

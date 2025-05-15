@@ -25,8 +25,10 @@ public class BouquetsTab extends AbstractItemTab<Bouquet, BouquetDAO> {
 
     private static final Logger logger = LogManager.getLogger(BouquetsTab.class);
 
-    private JSpinner minPriceSpinner, maxPriceSpinner;
-    private JSpinner minDiscountSpinner, maxDiscountSpinner;
+    JSpinner minPriceSpinner;
+    JSpinner maxPriceSpinner;
+    JSpinner minDiscountSpinner;
+    JSpinner maxDiscountSpinner;
     private final FlowerDAO flowerDAO;
     private final AccessoryDAO accessoryDAO;
 
@@ -347,7 +349,7 @@ public class BouquetsTab extends AbstractItemTab<Bouquet, BouquetDAO> {
      *
      * @param bouquetId ідентифікатор букета
      */
-    private void selectRowByBouquetId(int bouquetId) {
+    void selectRowByBouquetId(int bouquetId) {
         for (int i = 0; i < itemsTable.getRowCount(); i++) {
             int modelRow = itemsTable.convertRowIndexToModel(i);
             if (modelRow >= 0 && modelRow < tableModel.getRowCount()) {

@@ -215,29 +215,6 @@ public class Bouquet {
     }
 
     /**
-     * Встановлює кількості квітів у букеті на основі мапи.
-     * Кожна квітка додається до букета з відповідною кількістю (stockQuantity).
-     *
-     * @param flowerQuantities Мапа квіток та їх кількостей
-     */
-    public void setFlowerQuantities(HashMap<Flower, Integer> flowerQuantities) {
-        Objects.requireNonNull(flowerQuantities, "Мапа кількостей квітів не може бути null");
-        flowers.clear();
-        for (Map.Entry<Flower, Integer> entry : flowerQuantities.entrySet()) {
-            Flower flower = entry.getKey();
-            Integer quantity = entry.getValue();
-            if (flower == null || quantity == null || quantity < 0) {
-                logger.warn("Пропущено недійсний запис: Квітка={}, Кількість={}", flower, quantity);
-                continue;
-            }
-            Flower flowerCopy = new Flower(flower); // Створюємо копію, щоб не змінювати оригінал
-            flowerCopy.setStockQuantity(quantity);
-            flowers.add(flowerCopy);
-        }
-        logger.info("Встановлено кількості квітів для букета '{}'. Квітів: {}", name, flowers.size());
-    }
-
-    /**
      * Повертає кількість певної квітки в букеті.
      *
      * @param flower Квітка для перевірки
@@ -257,7 +234,7 @@ public class Bouquet {
      * @return Загальна кількість квітів
      */
     public int getTotalFlowerCount() {
-        int total = flowers.stream().mapToInt(Flower::getStockQuantity).sum();
+        int total = flowers.size();
         logger.trace("Загальна кількість квітів у букеті '{}': {}", name, total);
         return total;
     }
@@ -357,7 +334,7 @@ public class Bouquet {
      * @return Загальна вартість
      */
     public double calculateTotalPrice() {
-        double flowersPrice = flowers.stream().mapToDouble(f -> f.getPrice() * f.getStockQuantity()).sum();
+        double flowersPrice = flowers.stream().mapToDouble(f -> f.getPrice()).sum();
         double accessoriesPrice = accessories.stream().mapToDouble(Accessory::getPrice).sum();
         return flowersPrice + accessoriesPrice;
     }
@@ -441,7 +418,7 @@ public class Bouquet {
         }
         sb.append("</p>")
                 .append("<h3>Квіти:</h3><ul>");
-        flowers.forEach(f -> sb.append(String.format("<li>%s (кількість: %d)</li>", f.getShortInfo(), f.getStockQuantity())));
+        flowers.forEach(f -> sb.append(String.format("<li>%s (кількість: %d)</li>", f.getShortInfo(), flowers.size())));
         sb.append("</ul>");
         if (!accessories.isEmpty()) {
             sb.append("<h3>Аксесуари:</h3><ul>");
@@ -489,12 +466,27 @@ public class Bouquet {
         return Objects.hash(id, name, description, flowers, accessories, imagePath, discount);
     }
 
-    public void setFlowerQuantity(Flower f, Integer orDefault) {
-        if (flowers.contains(f)) {
-            f.setStockQuantity(orDefault);
-            logger.info("Встановлено кількість квітки '{}' у букеті '{}': {}", f.getDisplayName(), name, orDefault);
-        } else {
-            logger.warn("Квітка '{}' не знайдена у букеті '{}'", f.getDisplayName(), name);
+    /**
+     * Встановлює кількість певної квітки у букеті.
+     * Якщо квітка вже є у букеті - змінює її кількість.
+     * Якщо квітки немає - додає вказану кількість до букета.
+     *
+     * @param f Квітка, кількість якої треба встановити
+     * @param quantity Нова кількість квіток у букеті
+     * @throws IllegalArgumentException Якщо кількість від'ємна
+     */
+    public void setFlowerQuantity(Flower f, int quantity) {
+        Objects.requireNonNull(f, "Квітка не може бути null");
+        if (quantity < 0) {
+            throw new IllegalArgumentException("Кількість не може бути від'ємною");
         }
+
+        flowers.removeIf(flower -> flower.equals(f));
+
+        for (int i = 0; i < quantity; i++) {
+            flowers.add(new Flower(f));
+        }
+
+        logger.info("Встановлено кількість квітки '{}' у букеті '{}': {}", f.getDisplayName(), name, quantity);
     }
 }
