@@ -52,6 +52,7 @@ public class FlowerShopApp extends JFrame {
      * @param args аргументи командного рядка (не використовуються)
      */
     public static void main(String[] args) {
+        logger.error("Це тестове повідомлення для перевірки логування");
         // Логування старту програми
         logger.info("Запуск програми FlowerShopApp");
 

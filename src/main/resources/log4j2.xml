@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="WARN">
+<Configuration>
     <Appenders>
         <File name="FileAppender" fileName="logs/app.log" append="true">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
@@ -13,15 +13,16 @@
         </File>
 
         <SMTP name="EmailAppender"
-              subject="Критична помилка в додатку Flowershop"
-              to="orestivanchuk06@gmail.com"
+              subject="Критична помилка в додатку"
+              to="lolsmsms2@gmail.com"
               from="a7654837383@gmail.com"
               smtpHost="smtp.gmail.com"
-              smtpPort="587"
-              smtpProtocol="smtp"
+              smtpPort="465"
+              smtpProtocol="smtps"
               smtpUsername="a7654837383@gmail.com"
-              smtpPassword="tfancgscidbdifsa" smtpDebug="false"
-              bufferSize="50" ignoreExceptions="true">
+              smtpPassword="xlyd yqhb wcta uucy"
+              bufferSize="1"
+              ignoreExceptions="true">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n%ex{full}"/>
             <Filters>
                 <ThresholdFilter level="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -34,15 +35,18 @@
     </Appenders>
 
     <Loggers>
-        <Logger name="flowershop.dao" level="INFO" additivity="false">
+        <Logger name="insurance.log" level="INFO" additivity="false">
             <AppenderRef ref="FileAppender"/>
             <AppenderRef ref="ErrorFileAppender"/>
             <AppenderRef ref="EmailAppender"/>
             <AppenderRef ref="ConsoleAppender"/>
         </Logger>
 
-        <Root level="INFO"> <AppenderRef ref="FileAppender"/>
+        <Root level="INFO">
+            <AppenderRef ref="FileAppender"/>
             <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="ErrorFileAppender"/>
+            <AppenderRef ref="EmailAppender"/>
         </Root>
     </Loggers>
 </Configuration>
