@@ -5,6 +5,7 @@ import flowershop.dao.AccessoryDAO;
 import flowershop.dao.FlowerDAO;
 import flowershop.gui.Dialog.AddEditBouquetDialog;
 import flowershop.models.Bouquet;
+import flowershop.services.BouquetService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,6 +32,8 @@ public class BouquetsTab extends AbstractItemTab<Bouquet, BouquetDAO> {
     JSpinner maxDiscountSpinner;
     private final FlowerDAO flowerDAO;
     private final AccessoryDAO accessoryDAO;
+
+    BouquetService bouquetService;
 
     /**
      * Конструктор вкладки для керування букетами.
@@ -83,13 +86,14 @@ public class BouquetsTab extends AbstractItemTab<Bouquet, BouquetDAO> {
      */
     @Override
     protected Object[] getRowDataForItem(Bouquet bouquet) {
+        bouquetService = new BouquetService(bouquet);
         return new Object[]{
                 bouquet.getId(),
                 bouquet.getName(),
-                bouquet.getTotalFlowerCount(),
+                bouquetService.getTotalFlowerCount(),
                 bouquet.getAccessories().size(),
-                bouquet.calculateTotalPrice(),
-                bouquet.calculateDiscountedPrice(),
+                bouquetService.calculateTotalPrice(),
+                bouquetService.calculateDiscountedPrice(),
                 String.format("%.0f%%", bouquet.getDiscount())
         };
     }
@@ -267,9 +271,16 @@ public class BouquetsTab extends AbstractItemTab<Bouquet, BouquetDAO> {
         logger.debug("Фільтрація букетів. Текст: '{}', Ціна: {}-{}, Знижка: {}-{}", searchText, minPrice, maxPrice, minDiscount, maxDiscount);
 
         return allBouquets.stream()
-                .filter(bouquet -> (searchText.isEmpty() || bouquet.getName().toLowerCase().contains(searchText)) &&
-                        (bouquet.calculateTotalPrice() >= minPrice && bouquet.calculateTotalPrice() <= maxPrice) &&
-                        (bouquet.getDiscount() >= minDiscount && bouquet.getDiscount() <= maxDiscount))
+                .filter(bouquet -> {
+                    BouquetService bouquetService = new BouquetService(bouquet); // Створюємо сервіс для поточного букета
+                    double currentTotalPrice = bouquetService.calculateTotalPrice(); // Розраховуємо ціну через сервіс
+
+                    boolean nameMatches = searchText.isEmpty() || bouquet.getName().toLowerCase().contains(searchText);
+                    boolean priceMatches = currentTotalPrice >= minPrice && currentTotalPrice <= maxPrice;
+                    boolean discountMatches = bouquet.getDiscount() >= minDiscount && bouquet.getDiscount() <= maxDiscount;
+
+                    return nameMatches && priceMatches && discountMatches;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -416,7 +427,8 @@ public class BouquetsTab extends AbstractItemTab<Bouquet, BouquetDAO> {
      */
     @Override
     protected String getDetailedInfoForItem(Bouquet bouquet) {
-        return bouquet != null ? bouquet.getDetailedInfo() : "";
+        bouquetService = new BouquetService(bouquet);
+        return bouquet != null ? bouquetService.getDetailedInfo() : "";
     }
 
     /**

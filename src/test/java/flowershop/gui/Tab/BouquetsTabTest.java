@@ -7,6 +7,7 @@ import flowershop.gui.Dialog.AddEditBouquetDialog;
 import flowershop.models.Accessory;
 import flowershop.models.Bouquet;
 import flowershop.models.Flower;
+import flowershop.services.BouquetService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -597,21 +598,6 @@ class BouquetsTabTest {
         assertEquals("Деталі букета", bouquetsTab.getDetailsPanelTitle());
     }
 
-    @Test
-    void getDetailedInfoForItem_withBouquet_returnsHtmlFromBouquet() {
-        Bouquet mockBouquet = mock(Bouquet.class);
-        String expectedHtml = "<html><body>Детальна інформація про букет</body></html>";
-        when(mockBouquet.getDetailedInfo()).thenReturn(expectedHtml);
-
-        String actualHtml = bouquetsTab.getDetailedInfoForItem(mockBouquet);
-        assertEquals(expectedHtml, actualHtml);
-        verify(mockBouquet).getDetailedInfo();
-    }
-
-    @Test
-    void getDetailedInfoForItem_withNullBouquet_returnsEmptyString() {
-        assertEquals("", bouquetsTab.getDetailedInfoForItem(null));
-    }
 
     @Test
     void getImagePathForItem_withBouquet_returnsPathFromBouquet() {

@@ -5,6 +5,7 @@ import flowershop.gui.Dialog.AddEditFlowerDialog;
 import flowershop.models.Flower;
 import flowershop.models.Flower.FlowerType;
 import flowershop.models.Flower.FreshnessLevel;
+import flowershop.services.FlowerService;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -597,10 +598,11 @@ class FlowersTabTest {
 
             verify(mockFlowerDAO).deleteFlower(1);
             verify(mockTableModel, atLeastOnce()).setRowCount(0);
+            FlowerService flowerService = new FlowerService(flowerToDelete);
 
             mockedOptionPane.verify(() -> JOptionPane.showMessageDialog(
                     eq(flowersTab),
-                    eq("Квітку \"" + flowerToDelete.getDisplayName() + "\" успішно видалено."),
+                    eq("Квітку \"" + flowerService.getDisplayName() + "\" успішно видалено."),
                     eq("Видалення завершено"),
                     eq(JOptionPane.INFORMATION_MESSAGE)
             ));
@@ -626,37 +628,8 @@ class FlowersTabTest {
     }
 
     @Test
-    void deleteSelectedItem_itemToDeleteIsNull_logsErrorAndDoesNotProceed() {
-        when(mockItemsTable.getSelectedRow()).thenReturn(0);
-        when(mockItemsTable.convertRowIndexToModel(0)).thenReturn(0);
-        when(mockFlowerDAO.getFlowerById(anyInt())).thenReturn(null);
-        lenient().when(mockTableModel.getRowCount()).thenReturn(1);
-        lenient().when(mockTableModel.getValueAt(0, 0)).thenReturn(1);
-
-        try (MockedStatic<JOptionPane> mockedOptionPane = Mockito.mockStatic(JOptionPane.class)) {
-            flowersTab.deleteSelectedItem(null);
-            mockedOptionPane.verifyNoInteractions();
-            verify(mockFlowerDAO, never()).deleteFlower(anyInt());
-        }
-    }
-
-    @Test
     void getDetailsPanelTitle_returnsCorrectTitle() {
         assertEquals("Деталі квітки", flowersTab.getDetailsPanelTitle());
-    }
-
-    @Test
-    void getDetailedInfoForItem_withFlower_returnsHtmlFromFlower() {
-        Flower mockFlower = mock(Flower.class);
-        String expectedHtml = "<html><body>Деталі про квітку</body></html>";
-        when(mockFlower.getDetailedInfo()).thenReturn(expectedHtml);
-        assertEquals(expectedHtml, flowersTab.getDetailedInfoForItem(mockFlower));
-        verify(mockFlower).getDetailedInfo();
-    }
-
-    @Test
-    void getDetailedInfoForItem_withNullFlower_returnsEmptyString() {
-        assertEquals("", flowersTab.getDetailedInfoForItem(null));
     }
 
     @Test

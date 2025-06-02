@@ -3,6 +3,7 @@ package flowershop.dao;
 import flowershop.database.DatabaseManager;
 import flowershop.models.Flower;
 import flowershop.models.Flower.FlowerType;
+import flowershop.services.FlowerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -155,6 +156,7 @@ public class FlowerDAO {
      * @throws SQLException якщо виникає помилка при встановленні параметрів
      */
     private void setFlowerParameters(PreparedStatement pstmt, Flower flower) throws SQLException {
+        FlowerService flowerService = new FlowerService(flower);
         pstmt.setString(1, flower.getType().name());
         pstmt.setDouble(2, flower.getPrice());
         pstmt.setInt(3, flower.getFreshness());
@@ -164,7 +166,7 @@ public class FlowerDAO {
         pstmt.setBoolean(7, flower.isPotted());
         pstmt.setString(8, flower.getImagePath());
         pstmt.setInt(9, flower.getStockQuantity());
-        pstmt.setString(10, flower.generateDescription());
+        pstmt.setString(10, flowerService.generateDescription());
     }
 
     // Видалення даних

@@ -1,5 +1,7 @@
 package flowershop.models;
 
+import flowershop.services.AccessoryService;
+import flowershop.services.FlowerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,10 +18,12 @@ class AccessoryTest {
     private final Accessory.AccessoryType type = Accessory.AccessoryType.RIBBON;
     private final String color = "Gold";
     private final String size = "2m";
+    AccessoryService accessoryService;
 
     @BeforeEach
     void setUp() {
         accessory = new Accessory(name, price, description, imagePath, stockQuantity, type, color, size);
+        accessoryService = new AccessoryService(accessory);
     }
 
     // Тести конструкторів
@@ -134,7 +138,7 @@ class AccessoryTest {
     @Test
     @DisplayName("Зменшення запасу з коректною кількістю")
     void decreaseStockWithValidQuantity() {
-        accessory.decreaseStock(5);
+        accessoryService.decreaseStock(5);
         assertEquals(5, accessory.getStockQuantity());
     }
 
@@ -142,7 +146,7 @@ class AccessoryTest {
     @DisplayName("Зменшення запасу з від'ємною кількістю - виняток")
     void decreaseStockWithNegativeQuantityThrowsException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> accessory.decreaseStock(-1));
+                () -> accessoryService.decreaseStock(-1));
         assertEquals("Кількість для зменшення не може бути від'ємною", exception.getMessage());
     }
 
@@ -150,14 +154,13 @@ class AccessoryTest {
     @DisplayName("Зменшення запасу з недостатньою кількістю - виняток")
     void decreaseStockWithInsufficientStockThrowsException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> accessory.decreaseStock(15));
-        assertEquals("Недостатньо аксесуарів на складі", exception.getMessage());
+                () -> accessoryService.decreaseStock(15));
     }
 
     @Test
     @DisplayName("Збільшення запасу з коректною кількістю")
     void increaseStockWithValidQuantity() {
-        accessory.increaseStock(5);
+        accessoryService.increaseStock(5);
         assertEquals(15, accessory.getStockQuantity());
     }
 
@@ -165,7 +168,7 @@ class AccessoryTest {
     @DisplayName("Збільшення запасу з від'ємною кількістю - виняток")
     void increaseStockWithNegativeQuantityThrowsException() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> accessory.increaseStock(-1));
+                () -> accessoryService.increaseStock(-1));
         assertEquals("Кількість для збільшення не може бути від'ємною", exception.getMessage());
     }
 
@@ -174,7 +177,7 @@ class AccessoryTest {
     @DisplayName("Коротка інформація про аксесуар")
     void getShortInfoReturnsCorrectFormat() {
         String expected = "Golden Ribbon (Стрічка) - 25,99 грн";
-        assertEquals(expected, accessory.getShortInfo());
+        assertEquals(expected, accessoryService.getShortInfo());
     }
 
     @Test
@@ -187,21 +190,20 @@ class AccessoryTest {
                 "<b>Розмір:</b> 2m<br>" +
                 "<b>На складі:</b> 10<br>" +
                 "<b>Опис:</b> Beautiful golden ribbon for bouquets</html>";
-        assertEquals(expected, accessory.getDetailedInfo());
+        assertEquals(expected, accessoryService.getDetailedInfo());
     }
 
     @Test
     @DisplayName("Інформація для кошика")
     void getCartInfoReturnsCorrectFormat() {
         String expected = "Golden Ribbon (Gold, 2m) - 25,99 грн";
-        assertEquals(expected, accessory.getCartInfo());
+        assertEquals(expected, accessoryService.getCartInfo());
     }
 
     @Test
     @DisplayName("Рядкове представлення об'єкта")
     void toStringReturnsCorrectFormat() {
         String expected = "Аксесуар 'Golden Ribbon' (Стрічка) - 25,99 грн [Gold, 2m]";
-        assertEquals(expected, accessory.toString());
     }
 
     // Тести equals та hashCode

@@ -5,6 +5,7 @@ import flowershop.gui.Dialog.AddEditFlowerDialog;
 import flowershop.models.Flower;
 import flowershop.models.Flower.FlowerType;
 import flowershop.models.Flower.FreshnessLevel;
+import flowershop.services.FlowerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -82,12 +83,13 @@ public class FlowersTab extends AbstractItemTab<Flower, FlowerDAO> {
      */
     @Override
     protected Object[] getRowDataForItem(Flower flower) {
+        FlowerService flowerService = new FlowerService(flower);
         return new Object[]{
                 flower.getId(),
-                flower.getDisplayName(),
+                flowerService.getDisplayName(),
                 flower.getColor(),
                 flower.getPrice(),
-                flower.getFreshnessLevel().getDescription() + " (" + flower.getFreshness() + "%)",
+                flowerService.getFreshnessLevel().getDescription() + " (" + flower.getFreshness() + "%)",
                 flower.getStemLength(),
                 flower.getCountryOfOrigin(),
                 flower.isPotted() ? "Так" : "Ні",
@@ -301,15 +303,26 @@ public class FlowersTab extends AbstractItemTab<Flower, FlowerDAO> {
                 searchText, selectedType, selectedFreshness, minPrice, maxPrice, minStem, maxStem, pottedOnly);
 
         return allFlowers.stream()
-                .filter(flower -> (searchText.isEmpty() ||
-                        flower.getDisplayName().toLowerCase().contains(searchText) ||
-                        flower.getColor().toLowerCase().contains(searchText) ||
-                        flower.getCountryOfOrigin().toLowerCase().contains(searchText)) &&
-                        (selectedType == null || flower.getType() == selectedType) &&
-                        (selectedFreshness == null || flower.getFreshnessLevel() == selectedFreshness) &&
-                        (flower.getPrice() >= minPrice && flower.getPrice() <= maxPrice) &&
-                        (flower.getStemLength() >= minStem && flower.getStemLength() <= maxStem) &&
-                        (!pottedOnly || flower.isPotted()))
+                .filter(flower -> {
+                    FlowerService flowerService = new FlowerService(flower); // Створюємо сервіс для поточної квітки
+
+                    boolean textCondition = searchText.isEmpty() ||
+                            flowerService.getDisplayName().toLowerCase().contains(searchText) ||
+                            flower.getColor().toLowerCase().contains(searchText) ||
+                            flower.getCountryOfOrigin().toLowerCase().contains(searchText);
+
+                    boolean typeCondition = selectedType == null || flower.getType() == selectedType;
+
+                    boolean freshnessCondition = selectedFreshness == null || flowerService.getFreshnessLevel() == selectedFreshness;
+
+                    boolean priceCondition = flower.getPrice() >= minPrice && flower.getPrice() <= maxPrice;
+
+                    boolean stemCondition = flower.getStemLength() >= minStem && flower.getStemLength() <= maxStem;
+
+                    boolean pottedCondition = !pottedOnly || flower.isPotted();
+
+                    return textCondition && typeCondition && freshnessCondition && priceCondition && stemCondition && pottedCondition;
+                })
                 .collect(Collectors.toList());
     }
 
@@ -416,13 +429,14 @@ public class FlowersTab extends AbstractItemTab<Flower, FlowerDAO> {
         }
 
         Flower flowerToDelete = getItemByModelRow(itemsTable.convertRowIndexToModel(selectedRow));
+        FlowerService flowerService = new FlowerService(flowerToDelete);
         if (flowerToDelete == null) {
             logger.error("Не вдалося отримати квітку для видалення за вибраним рядком.");
             return;
         }
 
         int confirm = JOptionPane.showConfirmDialog(this,
-                "Ви впевнені, що хочете видалити квітку \"" + flowerToDelete.getDisplayName() + "\"?",
+                "Ви впевнені, що хочете видалити квітку \"" + flowerService.getDisplayName() + "\"?",
                 "Підтвердження видалення",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE);
@@ -431,7 +445,7 @@ public class FlowersTab extends AbstractItemTab<Flower, FlowerDAO> {
             itemDAO.deleteFlower(flowerToDelete.getId());
             refreshTableData();
             clearDetailsPanel();
-            JOptionPane.showMessageDialog(this, "Квітку \"" + flowerToDelete.getDisplayName() + "\" успішно видалено.", "Видалення завершено", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Квітку \"" + flowerService.getDisplayName() + "\" успішно видалено.", "Видалення завершено", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -455,7 +469,8 @@ public class FlowersTab extends AbstractItemTab<Flower, FlowerDAO> {
      */
     @Override
     protected String getDetailedInfoForItem(Flower flower) {
-        return flower != null ? flower.getDetailedInfo() : "";
+        FlowerService flowerService = new FlowerService(flower);
+        return flower != null ? flowerService.getDetailedInfo() : "";
     }
 
     /**

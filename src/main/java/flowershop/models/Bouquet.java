@@ -3,12 +3,14 @@ package flowershop.models;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Клас Bouquet моделює букет, що складається з квітів і аксесуарів.
- * Містить назву, опис, знижку, списки квітів та аксесуарів, а також шлях до зображення.
+ * Цей клас є переважно контейнером даних. Уся бізнес-логіка, розрахунки
+ * та операції маніпулювання букетом винесені до класу {@link flowershop.services.BouquetService}.
  */
 public class Bouquet {
 
@@ -17,434 +19,177 @@ public class Bouquet {
     private int id;
     private String name;
     private String description;
-    private final List<Flower> flowers;
-    private final List<Accessory> accessories;
+    private List<Flower> flowers;
+    private List<Accessory> accessories;
     private String imagePath;
     private double discount;
 
-    // --- Конструктори ---
-
     /**
      * Конструктор за замовчуванням. Створює порожній букет з назвою "Без назви".
+     * Ініціалізує порожні списки квітів та аксесуарів.
      */
     public Bouquet() {
         this("Без назви", "", new ArrayList<>(), new ArrayList<>(), "", 0);
+        logger.debug("Створено порожній букет за замовчуванням.");
     }
 
     /**
      * Основний конструктор для створення букета з усіма параметрами.
      *
-     * @param name        Назва букета
-     * @param description Опис букета
-     * @param flowers     Список квітів
-     * @param accessories Список аксесуарів
-     * @param imagePath   Шлях до зображення
-     * @param discount    Знижка у відсотках (0-100)
+     * @param name        Назва букета.
+     * @param description Опис букета.
+     * @param flowers     Список квітів, що входять до букета.
+     * @param accessories Список аксесуарів, що входять до букета.
+     * @param imagePath   Шлях до зображення букета.
+     * @param discount    Знижка на букет у відсотках (від 0 до 100).
+     * @throws NullPointerException     якщо назва, опис, списки квітів/аксесуарів або шлях до зображення є {@code null}.
+     * @throws IllegalArgumentException якщо знижка виходить за межі діапазону 0-100.
      */
     public Bouquet(String name, String description, List<Flower> flowers,
                    List<Accessory> accessories, String imagePath, double discount) {
-        this.id = -1; // Неконтрольоване значення, буде встановлено БД
+        this.id = -1;
         this.name = Objects.requireNonNull(name, "Назва букета не може бути null");
         this.description = Objects.requireNonNull(description, "Опис букета не може бути null");
         this.flowers = new ArrayList<>(Objects.requireNonNull(flowers, "Список квітів не може бути null"));
         this.accessories = new ArrayList<>(Objects.requireNonNull(accessories, "Список аксесуарів не може бути null"));
         this.imagePath = Objects.requireNonNull(imagePath, "Шлях до зображення не може бути null");
-        setDiscount(discount);
-        logger.info("Створено букет '{}'. Квітів: {}, Аксесуарів: {}", name, flowers.size(), accessories.size());
+        setDiscountInternal(discount); // Використовуємо внутрішній сеттер для валідації
+        logger.info("Створено букет '{}'. Квітів: {}, Аксесуарів: {}", name, this.flowers.size(), this.accessories.size());
     }
 
     /**
-     * Конструктор копіювання для створення копії існуючого букета.
+     * Конструктор копіювання для створення глибокої копії існуючого букета.
+     * Копіюються також списки квітів та аксесуарів.
      *
-     * @param bouquet Букет для копіювання
+     * @param otherBouquet Букет, з якого створюється копія.
+     * @throws NullPointerException якщо інший букет є {@code null}.
      */
-    public Bouquet(Bouquet bouquet) {
-        this(bouquet.name, bouquet.description, bouquet.flowers, bouquet.accessories,
-                bouquet.imagePath, bouquet.discount);
-        this.id = bouquet.id;
-        logger.info("Створено копію букета '{}'", bouquet.name);
+    public Bouquet(Bouquet otherBouquet) {
+        Objects.requireNonNull(otherBouquet, "Букет для копіювання не може бути null");
+        this.id = otherBouquet.id;
+        this.name = otherBouquet.name;
+        this.description = otherBouquet.description;
+        this.flowers = new ArrayList<>();
+        for(Flower flower : otherBouquet.flowers) {
+            this.flowers.add(new Flower(flower)); // Створюємо копії квітів
+        }
+        this.accessories = new ArrayList<>();
+        for(Accessory accessory : otherBouquet.accessories) {
+            this.accessories.add(new Accessory(accessory)); // Створюємо копії аксесуарів
+        }
+        this.imagePath = otherBouquet.imagePath;
+        this.discount = otherBouquet.discount;
+        logger.info("Створено копію букета '{}' (ID: {})", this.name, this.id);
     }
 
-    // --- Гетери ---
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Повертає копію списку квітів для інкапсуляції.
-     *
-     * @return Список квітів
-     */
-    public List<Flower> getFlowers() {
-        return new ArrayList<>(flowers);
-    }
-
-    /**
-     * Повертає копію списку аксесуарів для інкапсуляції.
-     *
-     * @return Список аксесуарів
-     */
-    public List<Accessory> getAccessories() {
-        return new ArrayList<>(accessories);
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public double getDiscount() {
-        return discount;
-    }
-
-    // --- Сетери ---
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = Objects.requireNonNull(name, "Назва букета не може бути null");
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setDescription(String description) {
         this.description = Objects.requireNonNull(description, "Опис букета не може бути null");
     }
 
+    /**
+     * Повертає копію списку квітів у букеті для забезпечення інкапсуляції.
+     * Зміни, внесені до повернутого списку, не вплинуть на внутрішній стан букета.
+     *
+     * @return Копія списку квітів.
+     */
+    public List<Flower> getFlowers() {
+        return new ArrayList<>(flowers);
+    }
+
+    /**
+     * Встановлює новий список квітів для букета.
+     * Попередній список квітів очищується, і до нього додаються всі квіти з наданого списку.
+     *
+     * @param flowers Новий список квітів.
+     * @throws NullPointerException якщо наданий список квітів є {@code null}.
+     */
+    public void setFlowers(List<Flower> flowers) {
+        this.flowers = new ArrayList<>(Objects.requireNonNull(flowers, "Список квітів не може бути null при встановленні"));
+        logger.debug("Встановлено новий список квітів для букета '{}'. Кількість: {}", name, this.flowers.size());
+    }
+
+    /**
+     * Повертає копію списку аксесуарів у букеті для забезпечення інкапсуляції.
+     * Зміни, внесені до повернутого списку, не вплинуть на внутрішній стан букета.
+     *
+     * @return Копія списку аксесуарів.
+     */
+    public List<Accessory> getAccessories() {
+        return new ArrayList<>(accessories);
+    }
+
+    /**
+     * Встановлює новий список аксесуарів для букета.
+     * Попередній список аксесуарів очищується, і до нього додаються всі аксесуари з наданого списку.
+     *
+     * @param accessories Новий список аксесуарів.
+     * @throws NullPointerException якщо наданий список аксесуарів є {@code null}.
+     */
+    public void setAccessories(List<Accessory> accessories) {
+        this.accessories = new ArrayList<>(Objects.requireNonNull(accessories, "Список аксесуарів не може бути null при встановленні"));
+        logger.debug("Встановлено новий список аксесуарів для букета '{}'. Кількість: {}", name, this.accessories.size());
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
     public void setImagePath(String imagePath) {
         this.imagePath = Objects.requireNonNull(imagePath, "Шлях до зображення не може бути null");
+    }
+
+    public double getDiscount() {
+        return discount;
     }
 
     /**
      * Встановлює знижку для букета.
      *
-     * @param discount Знижка у відсотках (0-100)
-     * @throws IllegalArgumentException Якщо знижка поза діапазоном
+     * @param discount Знижка у відсотках (від 0 до 100).
+     * @throws IllegalArgumentException Якщо знижка виходить за межі діапазону 0-100.
      */
     public void setDiscount(double discount) {
+        setDiscountInternal(discount);
+    }
+
+    private void setDiscountInternal(double discount) {
         if (discount < 0 || discount > 100) {
+            logger.warn("Спроба встановити недійсну знижку {} для букета '{}'", discount, name);
             throw new IllegalArgumentException("Знижка має бути в межах 0–100%");
         }
         this.discount = discount;
     }
 
     /**
-     * Встановлює новий список квітів.
+     * Повертає просте рядкове представлення об'єкта букета, включаючи його ID та назву.
+     * Для більш детальної інформації використовуйте методи класу {@link flowershop.services.BouquetService}.
      *
-     * @param flowers Список квітів
+     * @return Рядкове представлення букета.
      */
-    public void setFlowers(List<Flower> flowers) {
-        this.flowers.clear();
-        this.flowers.addAll(Objects.requireNonNull(flowers, "Список квітів не може бути null"));
-        logger.info("Встановлено новий список квітів для букета '{}'. Кількість: {}", name, flowers.size());
-    }
-
-    /**
-     * Встановлює новий список аксесуарів.
-     *
-     * @param accessories Список аксесуарів
-     */
-    public void setAccessories(List<Accessory> accessories) {
-        this.accessories.clear();
-        this.accessories.addAll(Objects.requireNonNull(accessories, "Список аксесуарів не може бути null"));
-        logger.info("Встановлено новий список аксесуарів для букета '{}'. Кількість: {}", name, accessories.size());
-    }
-
-    // --- Методи для роботи з квітами ---
-
-    /**
-     * Додає одну квітку до букета.
-     *
-     * @param flower Квітка для додавання
-     */
-    public void addFlower(Flower flower) {
-        flowers.add(Objects.requireNonNull(flower, "Квітка не може бути null"));
-        logger.info("Додано квітку '{}' до букета '{}'. Всього квітів: {}", flower.getDisplayName(), name, flowers.size());
-    }
-
-    /**
-     * Додає список квітів до букета.
-     *
-     * @param flowersToAdd Список квітів для додавання
-     */
-    public void addFlowers(List<Flower> flowersToAdd) {
-        Objects.requireNonNull(flowersToAdd, "Список квітів не може бути null");
-        if (flowersToAdd.isEmpty()) {
-            return;
-        }
-        flowers.addAll(flowersToAdd);
-        logger.info("Додано {} квіт(ів) до букета '{}'. Всього квітів: {}", flowersToAdd.size(), name, flowers.size());
-    }
-
-    /**
-     * Видаляє конкретну квітку з букета.
-     *
-     * @param flower Квітка для видалення
-     * @return true, якщо квітка була видалена, false — якщо не знайдена
-     */
-    public boolean removeFlower(Flower flower) {
-        boolean removed = flowers.remove(Objects.requireNonNull(flower, "Квітка не може бути null"));
-        if (removed) {
-            logger.info("Видалено квітку '{}' з букета '{}'. Всього квітів: {}", flower.getDisplayName(), name, flowers.size());
-        }
-        return removed;
-    }
-
-    /**
-     * Видаляє квітку за індексом.
-     *
-     * @param index Індекс квітки
-     * @return Видалена квітка
-     * @throws IndexOutOfBoundsException Якщо індекс недійсний
-     */
-    public Flower removeFlower(int index) {
-        if (index < 0 || index >= flowers.size()) {
-            throw new IndexOutOfBoundsException("Невірний індекс квітки");
-        }
-        Flower removedFlower = flowers.remove(index);
-        logger.info("Видалено квітку '{}' за індексом {} з букета '{}'", removedFlower.getDisplayName(), index, name);
-        return removedFlower;
-    }
-
-    /**
-     * Повертає кількість певної квітки в букеті.
-     *
-     * @param flower Квітка для перевірки
-     * @return Кількість квіток (stockQuantity) або 0, якщо не знайдено
-     */
-    public int getFlowerQuantity(Flower flower) {
-        return flowers.stream()
-                .filter(f -> f.equals(flower))
-                .findFirst()
-                .map(Flower::getStockQuantity)
-                .orElse(0);
-    }
-
-    /**
-     * Повертає загальну кількість квітів у букеті (враховує stockQuantity).
-     *
-     * @return Загальна кількість квітів
-     */
-    public int getTotalFlowerCount() {
-        int total = flowers.size();
-        logger.trace("Загальна кількість квітів у букеті '{}': {}", name, total);
-        return total;
-    }
-
-    // --- Методи для роботи з аксесуарами ---
-
-    /**
-     * Додає один аксесуар до букета.
-     *
-     * @param accessory Аксесуар для додавання
-     */
-    public void addAccessory(Accessory accessory) {
-        accessories.add(Objects.requireNonNull(accessory, "Аксесуар не може бути null"));
-        logger.info("Додано аксесуар '{}' до букета '{}'. Всього аксесуарів: {}", accessory.getName(), name, accessories.size());
-    }
-
-    /**
-     * Додає список аксесуарів до букета.
-     *
-     * @param accessoriesToAdd Список аксесуарів для додавання
-     */
-    public void addAccessories(List<Accessory> accessoriesToAdd) {
-        Objects.requireNonNull(accessoriesToAdd, "Список аксесуарів не може бути null");
-        if (accessoriesToAdd.isEmpty()) {
-            return;
-        }
-        accessories.addAll(accessoriesToAdd);
-        logger.info("Додано {} аксесуар(ів) до букета '{}'. Всього аксесуарів: {}", accessoriesToAdd.size(), name, accessories.size());
-    }
-
-    /**
-     * Видаляє конкретний аксесуар з букета.
-     *
-     * @param accessory Аксесуар для видалення
-     * @return true, якщо аксесуар був видалений, false — якщо не знайдений
-     */
-    public boolean removeAccessory(Accessory accessory) {
-        boolean removed = accessories.remove(Objects.requireNonNull(accessory, "Аксесуар не може бути null"));
-        if (removed) {
-            logger.info("Видалено аксесуар '{}' з букета '{}'. Всього аксесуарів: {}", accessory.getName(), name, accessories.size());
-        }
-        return removed;
-    }
-
-    /**
-     * Видаляє аксесуар за індексом.
-     *
-     * @param index Індекс аксесуара
-     * @return Видалений аксесуар
-     * @throws IndexOutOfBoundsException Якщо індекс недійсний
-     */
-    public Accessory removeAccessory(int index) {
-        if (index < 0 || index >= accessories.size()) {
-            throw new IndexOutOfBoundsException("Невірний індекс аксесуара");
-        }
-        Accessory removedAccessory = accessories.remove(index);
-        logger.info("Видалено аксесуар '{}' за індексом {} з букета '{}'", removedAccessory.getName(), index, name);
-        return removedAccessory;
-    }
-
-    // --- Методи для очищення ---
-
-    /**
-     * Очищає список квітів у букеті.
-     */
-    public void clearFlowers() {
-        if (!flowers.isEmpty()) {
-            logger.info("Очищено квіти з букета '{}'. Було квітів: {}", name, flowers.size());
-            flowers.clear();
-        }
-    }
-
-    /**
-     * Очищає список аксесуарів у букеті.
-     */
-    public void clearAccessories() {
-        if (!accessories.isEmpty()) {
-            logger.info("Очищено аксесуари з букета '{}'. Було аксесуарів: {}", name, accessories.size());
-            accessories.clear();
-        }
-    }
-
-    /**
-     * Повністю очищає букет (квіти та аксесуари).
-     */
-    public void clear() {
-        clearFlowers();
-        clearAccessories();
-        logger.info("Букет '{}' повністю очищено", name);
-    }
-
-    // --- Розрахункові методи ---
-
-    /**
-     * Обчислює загальну вартість букета без знижки.
-     *
-     * @return Загальна вартість
-     */
-    public double calculateTotalPrice() {
-        double flowersPrice = flowers.stream().mapToDouble(f -> f.getPrice()).sum();
-        double accessoriesPrice = accessories.stream().mapToDouble(Accessory::getPrice).sum();
-        return flowersPrice + accessoriesPrice;
-    }
-
-    /**
-     * Обчислює вартість букета з урахуванням знижки.
-     *
-     * @return Вартість зі знижкою
-     */
-    public double calculateDiscountedPrice() {
-        double totalPrice = calculateTotalPrice();
-        return totalPrice * (1 - discount / 100);
-    }
-
-    /**
-     * Обчислює середню свіжість квітів у букеті.
-     *
-     * @return Середня свіжість або 0, якщо квіти відсутні
-     */
-    public double calculateAverageFreshness() {
-        if (flowers.isEmpty()) {
-            return 0;
-        }
-        return flowers.stream().mapToInt(Flower::getFreshness).average().orElse(0);
-    }
-
-    /**
-     * Сортує квіти в букеті за свіжістю (зростання).
-     */
-    public void sortFlowersByFreshness() {
-        flowers.sort(Comparator.comparingInt(Flower::getFreshness));
-        logger.info("Квіти в букеті '{}' відсортовано за свіжістю", name);
-    }
-
-    /**
-     * Сортує квіти в букеті за довжиною стебла (спадання).
-     */
-    public void sortFlowersByStemLength() {
-        flowers.sort(Comparator.comparingInt(Flower::getStemLength).reversed());
-        logger.info("Квіти в букеті '{}' відсортовано за довжиною стебла", name);
-    }
-
-    /**
-     * Знаходить квіти з довжиною стебла в заданому діапазоні.
-     *
-     * @param minLength Мінімальна довжина
-     * @param maxLength Максимальна довжина
-     * @return Список знайдених квітів
-     */
-    public List<Flower> findFlowersByStemLengthRange(int minLength, int maxLength) {
-        List<Flower> found = flowers.stream()
-                .filter(f -> f.getStemLength() >= minLength && f.getStemLength() <= maxLength)
-                .collect(Collectors.toList());
-        logger.info("Знайдено {} квіт(ів) у букеті '{}' з довжиною стебла [{}, {}]", found.size(), name, minLength, maxLength);
-        return found;
-    }
-
-    // --- Методи для відображення ---
-
-    /**
-     * Повертає коротку інформацію про букет.
-     *
-     * @return Рядок з назвою, ціною та знижкою
-     */
-    public String getShortInfo() {
-        return String.format("%s - %.2f грн (%.0f%% знижка)", name, calculateDiscountedPrice(), discount);
-    }
-
-    /**
-     * Повертає детальну інформацію про букет у форматі HTML.
-     *
-     * @return Рядок з детальною інформацією
-     */
-    public String getDetailedInfo() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(String.format("<html><h2>%s</h2>", name))
-                .append(String.format("<p><b>Опис:</b> %s</p>", description))
-                .append(String.format("<p><b>Загальна вартість:</b> %.2f грн", calculateTotalPrice()));
-        if (discount > 0) {
-            sb.append(String.format(" <i>(знижка %.0f%%, ціна зі знижкою: %.2f грн)</i>", discount, calculateDiscountedPrice()));
-        }
-        sb.append("</p>")
-                .append("<h3>Квіти:</h3><ul>");
-        flowers.forEach(f -> sb.append(String.format("<li>%s (кількість: %d)</li>", f.getShortInfo(), flowers.size())));
-        sb.append("</ul>");
-        if (!accessories.isEmpty()) {
-            sb.append("<h3>Аксесуари:</h3><ul>");
-            accessories.forEach(a -> sb.append(String.format("<li>%s</li>", a.getShortInfo())));
-            sb.append("</ul>");
-        }
-        sb.append("</html>");
-        return sb.toString();
-    }
-
-    /**
-     * Повертає інформацію про букет для кошика.
-     *
-     * @return Рядок з назвою, кількістю квітів, аксесуарів та ціною
-     */
-    public String getCartInfo() {
-        return String.format("%s (Квітів: %d, Аксесуарів: %d) - %.2f грн",
-                name, getTotalFlowerCount(), accessories.size(), calculateDiscountedPrice());
-    }
-
-    // --- Перевизначення методів Object ---
-
     @Override
     public String toString() {
-        return String.format("Букет '%s' [Квітів: %d, Аксесуарів: %d, Ціна: %.2f грн]",
-                name, getTotalFlowerCount(), accessories.size(), calculateDiscountedPrice());
+        return String.format("Bouquet{id=%d, name='%s'}", id, name);
     }
 
     @Override
@@ -454,39 +199,15 @@ public class Bouquet {
         Bouquet bouquet = (Bouquet) o;
         return id == bouquet.id &&
                 Double.compare(bouquet.discount, discount) == 0 &&
-                name.equals(bouquet.name) &&
+                Objects.equals(name, bouquet.name) &&
                 Objects.equals(description, bouquet.description) &&
-                flowers.equals(bouquet.flowers) &&
-                accessories.equals(bouquet.accessories) &&
+                Objects.equals(flowers, bouquet.flowers) && // Порівняння списків за вмістом та порядком
+                Objects.equals(accessories, bouquet.accessories) && // Порівняння списків за вмістом та порядком
                 Objects.equals(imagePath, bouquet.imagePath);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, name, description, flowers, accessories, imagePath, discount);
-    }
-
-    /**
-     * Встановлює кількість певної квітки у букеті.
-     * Якщо квітка вже є у букеті - змінює її кількість.
-     * Якщо квітки немає - додає вказану кількість до букета.
-     *
-     * @param f Квітка, кількість якої треба встановити
-     * @param quantity Нова кількість квіток у букеті
-     * @throws IllegalArgumentException Якщо кількість від'ємна
-     */
-    public void setFlowerQuantity(Flower f, int quantity) {
-        Objects.requireNonNull(f, "Квітка не може бути null");
-        if (quantity < 0) {
-            throw new IllegalArgumentException("Кількість не може бути від'ємною");
-        }
-
-        flowers.removeIf(flower -> flower.equals(f));
-
-        for (int i = 0; i < quantity; i++) {
-            flowers.add(new Flower(f));
-        }
-
-        logger.info("Встановлено кількість квітки '{}' у букеті '{}': {}", f.getDisplayName(), name, quantity);
     }
 }

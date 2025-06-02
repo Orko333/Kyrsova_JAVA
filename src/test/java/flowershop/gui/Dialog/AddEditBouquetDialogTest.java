@@ -5,6 +5,8 @@ import flowershop.models.Accessory.AccessoryType;
 import flowershop.models.Bouquet;
 import flowershop.models.Flower;
 import flowershop.models.Flower.FlowerType;
+import flowershop.services.AccessoryService;
+import flowershop.services.FlowerService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedConstruction;
@@ -166,7 +168,8 @@ class AddEditBouquetDialogTest {
             addFlowerButton.doClick();
 
             assertEquals(1, selectedFlowersDisplayList.getModel().getSize());
-            assertTrue(selectedFlowersDisplayList.getModel().getElementAt(0).contains(flower1.getShortInfo()));
+            FlowerService flowerService = new FlowerService(flower1);
+            assertTrue(selectedFlowersDisplayList.getModel().getElementAt(0).contains(flowerService.getShortInfo()));
             assertTrue(selectedFlowersDisplayList.getModel().getElementAt(0).contains("(x2)"));
 
             selectedFlowersDisplayList.setSelectedIndex(0);
@@ -182,7 +185,9 @@ class AddEditBouquetDialogTest {
 
             assertEquals(1, selectedAccessoriesDisplayList.getModel().getSize());
             Accessory addedAccessory = (Accessory)selectedAccessoriesDisplayList.getModel().getElementAt(0);
-            assertEquals(accessory1.getShortInfo(), addedAccessory.getShortInfo());
+            AccessoryService accessoryService = new AccessoryService(addedAccessory);
+            AccessoryService accessoryService1 = new AccessoryService(accessory1);
+            assertEquals(accessoryService1.getShortInfo(), accessoryService.getShortInfo());
 
             selectedAccessoriesDisplayList.setSelectedIndex(0);
             removeAccessoryButton.doClick();
@@ -260,7 +265,8 @@ class AddEditBouquetDialogTest {
 
             long countOfFlower2 = existingBouquet.getFlowers().stream().filter(f -> f.getId() == flower2.getId()).count();
             assertEquals(1, selectedFlowersDisplayList.getModel().getSize(), "Selected flowers display list should show one type.");
-            String expectedFlowerDisplay = flower2.getShortInfo() + " (x" + countOfFlower2 + ")";
+            FlowerService flowerService = new FlowerService(flower2);
+            String expectedFlowerDisplay = flowerService.getShortInfo() + " (x" + countOfFlower2 + ")";
             assertEquals(expectedFlowerDisplay, selectedFlowersDisplayList.getModel().getElementAt(0));
 
             assertEquals(1, selectedAccessoriesDisplayList.getModel().getSize());
@@ -335,7 +341,8 @@ class AddEditBouquetDialogTest {
                 }
             }
             assertEquals(1, selectedFlowersDisplayList.getModel().getSize());
-            assertTrue(selectedFlowersDisplayList.getModel().getElementAt(0).contains(flower1.getShortInfo()));
+            FlowerService flowerService = new FlowerService(flower1);
+            assertTrue(selectedFlowersDisplayList.getModel().getElementAt(0).contains(flowerService.getShortInfo()));
         }
 
         @Test
@@ -796,7 +803,8 @@ class AddEditBouquetDialogTest {
             DefaultListModel<String> selectedModel = (DefaultListModel<String>) selectedFlowersDisplayList.getModel();
             boolean found = false;
             for (int i = 0; i < selectedModel.getSize(); i++) {
-                if (selectedModel.getElementAt(i).contains(missingFlower.getShortInfo())) {
+                FlowerService flowerService = new FlowerService(missingFlower);
+                if (selectedModel.getElementAt(i).contains(flowerService.getShortInfo())) {
                     found = true;
                     break;
                 }

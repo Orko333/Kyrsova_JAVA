@@ -3,6 +3,8 @@ package flowershop.gui.Dialog;
 import flowershop.models.Bouquet;
 import flowershop.models.Flower;
 import flowershop.models.Accessory;
+import flowershop.services.AccessoryService; // Переконайтесь, що цей імпорт є
+import flowershop.services.FlowerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -346,8 +348,9 @@ public class AddEditBouquetDialog extends JDialog {
         selectedFlowersDisplayModel.clear();
         for (int i = 0; i < selectedFlowersModel.getSize(); i++) {
             Flower flower = selectedFlowersModel.getElementAt(i);
+            FlowerService flowerService = new FlowerService(flower);
             int quantity = currentFlowerQuantities.getOrDefault(flower, 1);
-            selectedFlowersDisplayModel.addElement(flower.getShortInfo() + " (x" + quantity + ")");
+            selectedFlowersDisplayModel.addElement(flowerService.getShortInfo() + " (x" + quantity + ")");
         }
     }
 
@@ -827,18 +830,26 @@ public class AddEditBouquetDialog extends JDialog {
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value instanceof Flower) {
-                label.setText(((Flower) value).getShortInfo());
+                Flower flower = (Flower) value;
+                FlowerService flowerService = new FlowerService(flower);
+                label.setText(flowerService.getShortInfo());
             }
             return label;
         }
     }
 
+    /**
+     * Клас для кастомного відображення об'єктів Accessory у списках JList.
+     * Використовує {@link AccessoryService} для отримання короткої інформації про аксесуар.
+     */
     static class AccessoryRenderer extends DefaultListCellRenderer {
         @Override
         public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             JLabel label = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
             if (value instanceof Accessory) {
-                label.setText(((Accessory) value).getShortInfo());
+                Accessory accessory = (Accessory) value;
+                AccessoryService accessoryService = new AccessoryService(accessory);
+                label.setText(accessoryService.getShortInfo());
             }
             return label;
         }
