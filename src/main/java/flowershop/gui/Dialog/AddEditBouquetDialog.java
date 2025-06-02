@@ -461,16 +461,11 @@ public class AddEditBouquetDialog extends JDialog {
     Flower findRepresentativeFlower(Flower target, List<Flower> sourceList) {
         if (target == null || sourceList == null) return null;
         for (Flower f : sourceList) {
-            // Краще порівнювати за унікальним ідентифікатором, якщо він є і надійний
             if (f.getId() != 0 && f.getId() == target.getId()) {
                 return f;
             }
-            // Якщо ID немає, можна порівнювати за іншими атрибутами, але це менш надійно
-            // Наприклад, if (f.equals(target)) return f; - але equals має бути правильно визначений
         }
-        // Якщо точного співпадіння за ID немає, можна спробувати знайти "схожу" квітку,
-        // але це залежить від бізнес-логіки. Для простоти, якщо не знайдено за ID, повертаємо null.
-        return null; // Або target, якщо хочемо завжди мати об'єкт
+        return null;
     }
 
     Accessory findRepresentativeAccessory(Accessory target, List<Accessory> sourceList) {
