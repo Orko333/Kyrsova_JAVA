@@ -3,7 +3,7 @@ package flowershop.gui.Dialog;
 import flowershop.models.Bouquet;
 import flowershop.models.Flower;
 import flowershop.models.Accessory;
-import flowershop.services.AccessoryService; // Переконайтесь, що цей імпорт є
+import flowershop.services.AccessoryService;
 import flowershop.services.FlowerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -27,6 +27,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Діалогове вікно для додавання або редагування букета.
+ * Компоненти мають встановлені імена для полегшення автоматизованого тестування.
  */
 public class AddEditBouquetDialog extends JDialog {
     private static final Logger logger = LogManager.getLogger(AddEditBouquetDialog.class);
@@ -88,13 +89,13 @@ public class AddEditBouquetDialog extends JDialog {
         this.availableAccessoriesSource = allAvailableAccessories != null ? new ArrayList<>(allAvailableAccessories) : new ArrayList<>();
 
         initializeUI();
+        setComponentNames(); // Встановлення імен для компонентів
 
         if (this.bouquet != null) {
             populateFields();
         }
 
         if (!GraphicsEnvironment.isHeadless()) {
-            pack();
             setSize(new Dimension(950, 800));
             setLocationRelativeTo(parent);
             setResizable(true);
@@ -116,6 +117,34 @@ public class AddEditBouquetDialog extends JDialog {
         add(createMainFormPanel(), BorderLayout.CENTER);
         add(createButtonPanel(), BorderLayout.SOUTH);
     }
+
+    /**
+     * Встановлює програмні імена для GUI компонентів.
+     * Це необхідно для їх ідентифікації в автоматизованих тестах.
+     */
+    private void setComponentNames() {
+        if (nameField != null) nameField.setName("nameField");
+        if (descriptionArea != null) descriptionArea.setName("descriptionArea");
+        if (discountSpinner != null) discountSpinner.setName("discountSpinner");
+        if (imagePathField != null) imagePathField.setName("imagePathField");
+        if (browseButton != null) browseButton.setName("browseButton");
+        if (previewImageLabel != null) previewImageLabel.setName("previewImageLabel");
+
+        if (availableFlowersList != null) availableFlowersList.setName("availableFlowersList");
+        if (flowerQuantitySpinner != null) flowerQuantitySpinner.setName("flowerQuantitySpinner");
+        if (addFlowerButton != null) addFlowerButton.setName("addFlowerButton");
+        if (selectedFlowersDisplayList != null) selectedFlowersDisplayList.setName("selectedFlowersDisplayList");
+        if (removeFlowerButton != null) removeFlowerButton.setName("removeFlowerButton");
+
+        if (availableAccessoriesList != null) availableAccessoriesList.setName("availableAccessoriesList");
+        if (addAccessoryButton != null) addAccessoryButton.setName("addAccessoryButton");
+        if (selectedAccessoriesDisplayList != null) selectedAccessoriesDisplayList.setName("selectedAccessoriesDisplayList");
+        if (removeAccessoryButton != null) removeAccessoryButton.setName("removeAccessoryButton");
+
+        if (okButton != null) okButton.setName("okButton");
+        if (cancelButton != null) cancelButton.setName("cancelButton");
+    }
+
 
     private JPanel createMainFormPanel() {
         this.selectedFlowersModel = new DefaultListModel<>();
@@ -164,12 +193,14 @@ public class AddEditBouquetDialog extends JDialog {
         });
 
         browseButton = createStyledButton("Огляд...", "/icons/browse.png");
+        // browseButton.setName("browseButton"); // Перенесено в setComponentNames()
         browseButton.addActionListener(e -> browseImageAction());
         imageSelectionPanel.add(imagePathField, BorderLayout.CENTER);
         imageSelectionPanel.add(browseButton, BorderLayout.EAST);
         addFormField(topPanel, "Зображення:", imageSelectionPanel, gbcTop, 3, 1, GridBagConstraints.HORIZONTAL);
 
         previewImageLabel = new JLabel("Прев'ю", JLabel.CENTER);
+        // previewImageLabel.setName("previewImageLabel"); // Перенесено в setComponentNames()
         previewImageLabel.setPreferredSize(new Dimension(150, 120));
         previewImageLabel.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
         previewImageLabel.setOpaque(true);
@@ -211,6 +242,7 @@ public class AddEditBouquetDialog extends JDialog {
 
         if (isFlowers) {
             availableFlowersList = new JList<>(availableFlowersSource.toArray(new Flower[0]));
+            // availableFlowersList.setName("availableFlowersList"); // Перенесено в setComponentNames()
             availableFlowersList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             availableFlowersList.setCellRenderer(new FlowerRenderer());
             availableFlowersList.addMouseListener(new MouseAdapter() {
@@ -226,15 +258,18 @@ public class AddEditBouquetDialog extends JDialog {
             flowerControls.setOpaque(false);
             flowerControls.add(new JLabel("К-сть:"));
             flowerQuantitySpinner = new JSpinner(new SpinnerNumberModel(1, 1, 100, 1));
+            // flowerQuantitySpinner.setName("flowerQuantitySpinner"); // Перенесено в setComponentNames()
             flowerQuantitySpinner.setPreferredSize(new Dimension(60, 25));
             flowerControls.add(flowerQuantitySpinner);
             addFlowerButton = createStyledButton("Додати >", null);
+            // addFlowerButton.setName("addFlowerButton"); // Перенесено в setComponentNames()
             addFlowerButton.setPreferredSize(new Dimension(100, 25));
             addFlowerButton.addActionListener(e -> addFlowerToList());
             flowerControls.add(addFlowerButton);
             panel.add(flowerControls, BorderLayout.SOUTH);
         } else {
             availableAccessoriesList = new JList<>(availableAccessoriesSource.toArray(new Accessory[0]));
+            // availableAccessoriesList.setName("availableAccessoriesList"); // Перенесено в setComponentNames()
             availableAccessoriesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             availableAccessoriesList.setCellRenderer(new AccessoryRenderer());
             availableAccessoriesList.addMouseListener(new MouseAdapter() {
@@ -249,6 +284,7 @@ public class AddEditBouquetDialog extends JDialog {
             JPanel accessoryControls = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             accessoryControls.setOpaque(false);
             addAccessoryButton = createStyledButton("Додати >", null);
+            // addAccessoryButton.setName("addAccessoryButton"); // Перенесено в setComponentNames()
             addAccessoryButton.setPreferredSize(new Dimension(100, 25));
             addAccessoryButton.addActionListener(e -> addAccessoryToList());
             accessoryControls.add(addAccessoryButton);
@@ -264,6 +300,7 @@ public class AddEditBouquetDialog extends JDialog {
 
         if (isFlowers) {
             selectedFlowersDisplayList = new JList<>(selectedFlowersDisplayModel);
+            // selectedFlowersDisplayList.setName("selectedFlowersDisplayList"); // Перенесено в setComponentNames()
             selectedFlowersDisplayList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             selectedFlowersDisplayList.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent evt) {
@@ -275,6 +312,7 @@ public class AddEditBouquetDialog extends JDialog {
             panel.add(new JScrollPane(selectedFlowersDisplayList), BorderLayout.CENTER);
 
             removeFlowerButton = createStyledButton("< Видалити", null);
+            // removeFlowerButton.setName("removeFlowerButton"); // Перенесено в setComponentNames()
             removeFlowerButton.setPreferredSize(new Dimension(110, 25));
             removeFlowerButton.addActionListener(e -> removeFlowerFromList());
             JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -283,6 +321,7 @@ public class AddEditBouquetDialog extends JDialog {
             panel.add(controlPanel, BorderLayout.SOUTH);
         } else {
             selectedAccessoriesDisplayList = new JList<>(selectedAccessoriesModel);
+            // selectedAccessoriesDisplayList.setName("selectedAccessoriesDisplayList"); // Перенесено в setComponentNames()
             selectedAccessoriesDisplayList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             selectedAccessoriesDisplayList.setCellRenderer(new AccessoryRenderer());
             selectedAccessoriesDisplayList.addMouseListener(new MouseAdapter() {
@@ -295,6 +334,7 @@ public class AddEditBouquetDialog extends JDialog {
             panel.add(new JScrollPane(selectedAccessoriesDisplayList), BorderLayout.CENTER);
 
             removeAccessoryButton = createStyledButton("< Видалити", null);
+            // removeAccessoryButton.setName("removeAccessoryButton"); // Перенесено в setComponentNames()
             removeAccessoryButton.setPreferredSize(new Dimension(110, 25));
             removeAccessoryButton.addActionListener(e -> removeAccessoryFromList());
             JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -391,7 +431,7 @@ public class AddEditBouquetDialog extends JDialog {
                 Map<Flower, Integer> bouquetFlowerQuantities = new HashMap<>();
                 for(Flower f : bouquet.getFlowers()){
                     Flower representativeFlower = findRepresentativeFlower(f, availableFlowersSource);
-                    if (representativeFlower == null) representativeFlower = f;
+                    if (representativeFlower == null) representativeFlower = f; // Якщо не знайдено в source, використовуємо саму квітку з букета
 
                     bouquetFlowerQuantities.put(representativeFlower, bouquetFlowerQuantities.getOrDefault(representativeFlower, 0) +1);
                 }
@@ -409,7 +449,8 @@ public class AddEditBouquetDialog extends JDialog {
                     Accessory representativeAccessory = findRepresentativeAccessory(acc, availableAccessoriesSource);
                     if (representativeAccessory != null && !selectedAccessoriesModel.contains(representativeAccessory)) {
                         selectedAccessoriesModel.addElement(representativeAccessory);
-                    } else if (!selectedAccessoriesModel.contains(acc)) {
+                    } else if (representativeAccessory == null && !selectedAccessoriesModel.contains(acc)) {
+                        // Якщо аксесуар з букета не знайдено серед доступних, але його ще немає у вибраних
                         selectedAccessoriesModel.addElement(acc);
                     }
                 }
@@ -420,21 +461,26 @@ public class AddEditBouquetDialog extends JDialog {
     Flower findRepresentativeFlower(Flower target, List<Flower> sourceList) {
         if (target == null || sourceList == null) return null;
         for (Flower f : sourceList) {
-            if (f.getId() == target.getId()) {
+            // Краще порівнювати за унікальним ідентифікатором, якщо він є і надійний
+            if (f.getId() != 0 && f.getId() == target.getId()) {
                 return f;
             }
+            // Якщо ID немає, можна порівнювати за іншими атрибутами, але це менш надійно
+            // Наприклад, if (f.equals(target)) return f; - але equals має бути правильно визначений
         }
-        return null;
+        // Якщо точного співпадіння за ID немає, можна спробувати знайти "схожу" квітку,
+        // але це залежить від бізнес-логіки. Для простоти, якщо не знайдено за ID, повертаємо null.
+        return null; // Або target, якщо хочемо завжди мати об'єкт
     }
 
     Accessory findRepresentativeAccessory(Accessory target, List<Accessory> sourceList) {
         if (target == null || sourceList == null) return null;
         for (Accessory a : sourceList) {
-            if (a.getId() == target.getId()) {
+            if (a.getId() != 0 && a.getId() == target.getId()) {
                 return a;
             }
         }
-        return null;
+        return null; // Або target
     }
 
     /**
@@ -451,7 +497,7 @@ public class AddEditBouquetDialog extends JDialog {
 
             if (name.isEmpty()) {
                 showErrorDialog("Назва букета не може бути порожньою.");
-                nameField.requestFocusInWindow();
+                if (!GraphicsEnvironment.isHeadless()) nameField.requestFocusInWindow();
                 return false;
             }
 
@@ -464,58 +510,48 @@ public class AddEditBouquetDialog extends JDialog {
             if (!imagePath.isEmpty()) {
                 File imageFile = new File(imagePath);
                 if (!imageFile.isFile() || !imageFile.exists()) {
-                    int response = JOptionPane.NO_OPTION;
+                    int response = JOptionPane.NO_OPTION; // За замовчуванням для headless
                     if (!GraphicsEnvironment.isHeadless()) {
                         response = JOptionPane.showConfirmDialog(this,
                                 "Файл зображення за вказаним шляхом не знайдено або це не файл.\nПродовжити збереження без зображення (або з поточним, якщо є)?",
                                 "Попередження: Зображення",
                                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
                     } else {
-                        response = JOptionPane.YES_OPTION;
+                        response = JOptionPane.YES_OPTION; // В headless режимі автоматично продовжуємо
                     }
 
-                    if (response == JOptionPane.NO_OPTION) {
-                        if (!GraphicsEnvironment.isHeadless()) imagePathField.requestFocusInWindow();
-                        return false;
-                    } else {
-                        if (bouquet != null && bouquet.getImagePath() != null && !bouquet.getImagePath().isEmpty()) {
-                            File oldImageFile = new File(bouquet.getImagePath());
-                            if (oldImageFile.isFile() && oldImageFile.exists()) {
-                                finalImagePath = bouquet.getImagePath();
-                            } else {
-                                finalImagePath = "";
-                            }
-                        } else {
-                            finalImagePath = "";
-                        }
-                    }
                 }
+            } else if (bouquet != null && bouquet.getImagePath() != null && !bouquet.getImagePath().isEmpty() && new File(bouquet.getImagePath()).exists()){
+                // Якщо поле шляху очистили, але був старий валідний шлях, зберігаємо його
+                finalImagePath = bouquet.getImagePath();
+                imagePathField.setText(finalImagePath);
             }
+
 
             List<Flower> finalSelectedFlowersWithQuantities = new ArrayList<>();
             for (int i = 0; i < selectedFlowersModel.getSize(); i++) {
                 Flower baseFlower = selectedFlowersModel.getElementAt(i);
                 int quantity = currentFlowerQuantities.getOrDefault(baseFlower, 1);
                 for(int q = 0; q < quantity; q++) {
-                    finalSelectedFlowersWithQuantities.add(new Flower(baseFlower));
+                    finalSelectedFlowersWithQuantities.add(new Flower(baseFlower)); // Створюємо копії
                 }
             }
 
             List<Accessory> finalSelectedAccessories = new ArrayList<>();
             for (int i = 0; i < selectedAccessoriesModel.getSize(); i++) {
-                finalSelectedAccessories.add(new Accessory(selectedAccessoriesModel.getElementAt(i)));
+                finalSelectedAccessories.add(new Accessory(selectedAccessoriesModel.getElementAt(i))); // Створюємо копії
             }
 
             if (bouquet == null) {
-                bouquet = new Bouquet(name, description, new ArrayList<>(), new ArrayList<>(), finalImagePath, discount);
+                bouquet = new Bouquet(name, description, finalSelectedFlowersWithQuantities, finalSelectedAccessories, finalImagePath, discount);
+            } else {
+                bouquet.setName(name);
+                bouquet.setDescription(description);
+                bouquet.setDiscount(discount);
+                bouquet.setImagePath(finalImagePath);
+                bouquet.setFlowers(finalSelectedFlowersWithQuantities);
+                bouquet.setAccessories(finalSelectedAccessories);
             }
-            bouquet.setName(name);
-            bouquet.setDescription(description);
-            bouquet.setDiscount(discount);
-            bouquet.setImagePath(finalImagePath);
-
-            bouquet.setFlowers(finalSelectedFlowersWithQuantities);
-            bouquet.setAccessories(finalSelectedAccessories);
 
             logger.info("Букет '{}' підготовлено до збереження.", bouquet.getName());
             return true;
@@ -536,10 +572,12 @@ public class AddEditBouquetDialog extends JDialog {
         buttonPanel.setBackground(BACKGROUND_COLOR);
 
         okButton = createStyledButton("Зберегти", "/icons/save.png");
+        // okButton.setName("okButton"); // Перенесено в setComponentNames()
         okButton.addActionListener(e -> saveAndClose());
         buttonPanel.add(okButton);
 
         cancelButton = createStyledButton("Скасувати", "/icons/cancel.png");
+        // cancelButton.setName("cancelButton"); // Перенесено в setComponentNames()
         cancelButton.addActionListener(e -> cancelAndClose());
         buttonPanel.add(cancelButton);
 
@@ -604,12 +642,17 @@ public class AddEditBouquetDialog extends JDialog {
         JButton button = new JButton(text);
         if (iconPath != null && !GraphicsEnvironment.isHeadless()) {
             try {
-                ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
-                if (icon.getIconWidth() > 0) {
-                    Image img = icon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH);
-                    button.setIcon(new ImageIcon(img));
+                java.net.URL imgUrl = getClass().getResource(iconPath);
+                if (imgUrl != null) {
+                    ImageIcon icon = new ImageIcon(imgUrl);
+                    if (icon.getIconWidth() > 0) {
+                        Image img = icon.getImage().getScaledInstance(16, 16, Image.SCALE_SMOOTH);
+                        button.setIcon(new ImageIcon(img));
+                    } else {
+                        logger.warn("Іконка {} має нульову ширину або не була коректно завантажена.", iconPath);
+                    }
                 } else {
-                    logger.warn("Іконка {} має нульову ширину.", iconPath);
+                    logger.warn("Не вдалося знайти ресурс іконки: {}", iconPath);
                 }
             } catch (Exception e) {
                 logger.warn("Не вдалося завантажити іконку: {}", iconPath, e);
@@ -667,7 +710,7 @@ public class AddEditBouquetDialog extends JDialog {
         if (GraphicsEnvironment.isHeadless()) {
             logger.info("Пропуск browseImageAction в headless режимі.");
             if (imagePathField != null) {
-                imagePathField.setText("");
+                imagePathField.setText(""); // Очищення поля в headless режимі
                 logger.debug("Очистка поля зображення в headless режимі.");
             }
             return;
@@ -694,8 +737,10 @@ public class AddEditBouquetDialog extends JDialog {
      */
     protected void updatePreviewImage(String path) {
         if (previewImageLabel == null || GraphicsEnvironment.isHeadless()) {
-            if (previewImageLabel != null) previewImageLabel.setIcon(null);
-            if (previewImageLabel != null) previewImageLabel.setText("Прев'ю");
+            if (previewImageLabel != null) {
+                previewImageLabel.setIcon(null);
+                previewImageLabel.setText("Прев'ю");
+            }
             return;
         }
 
@@ -706,10 +751,20 @@ public class AddEditBouquetDialog extends JDialog {
                     ImageIcon originalIcon = new ImageIcon(path);
                     Image image = originalIcon.getImage();
 
+                    // Перевірка, чи зображення завантажилось коректно
+                    if (originalIcon.getIconWidth() == -1 || originalIcon.getIconHeight() == -1) {
+                        logger.warn("Не вдалося завантажити зображення для попереднього перегляду: {}", path);
+                        previewImageLabel.setIcon(null);
+                        previewImageLabel.setText("Прев'ю");
+                        return;
+                    }
+
+
                     int previewWidth = previewImageLabel.getPreferredSize().width -10;
                     int previewHeight = previewImageLabel.getPreferredSize().height -10;
-                    if (previewWidth <= 0) previewWidth = 140;
-                    if (previewHeight <= 0) previewHeight = 110;
+                    if (previewWidth <= 0) previewWidth = 140; // Значення за замовчуванням
+                    if (previewHeight <= 0) previewHeight = 110; // Значення за замовчуванням
+
 
                     int originalWidth = originalIcon.getIconWidth();
                     int originalHeight = originalIcon.getIconHeight();
@@ -725,6 +780,10 @@ public class AddEditBouquetDialog extends JDialog {
                             newWidth = (int) (originalWidth * ratio);
                             newHeight = (int) (originalHeight * ratio);
                         }
+                        // Переконуємося, що нові розміри не нульові
+                        if (newWidth <= 0) newWidth = 1;
+                        if (newHeight <= 0) newHeight = 1;
+
                         Image scaledImage = image.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
                         previewImageLabel.setIcon(new ImageIcon(scaledImage));
                         previewImageLabel.setText(null);
@@ -754,7 +813,9 @@ public class AddEditBouquetDialog extends JDialog {
         }
         for (int i = 0; i < components.length; i++) {
             final Component currentComponent = components[i];
-            final Component nextComponent = (i < components.length - 1) ? components[i + 1] : okButton;
+            // Використовуємо okButton як останній елемент, якщо він не null
+            final Component nextComponent = (i < components.length - 1) ? components[i + 1] : (okButton != null ? okButton : currentComponent);
+
 
             if (currentComponent == null || nextComponent == null) {
                 continue;
@@ -776,13 +837,13 @@ public class AddEditBouquetDialog extends JDialog {
                 ((JTextArea) currentComponent).addKeyListener(new KeyAdapter() {
                     @Override
                     public void keyPressed(KeyEvent e) {
-                        if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) {
+                        if (e.getKeyCode() == KeyEvent.VK_ENTER && e.isControlDown()) { // Ctrl+Enter для JTextArea
                             if (nextComponent.isFocusable()) nextComponent.requestFocusInWindow();
                             e.consume();
                         }
                     }
                 });
-            } else {
+            } else { // Для інших компонентів (наприклад, кнопок, якщо вони будуть у списку)
                 currentComponent.addKeyListener(new KeyAdapter() {
                     @Override
                     public void keyPressed(KeyEvent e) {
@@ -805,23 +866,25 @@ public class AddEditBouquetDialog extends JDialog {
         logger.warn("Помилка валідації: {}", message);
 
         if (!GraphicsEnvironment.isHeadless()) {
-            final JOptionPane optionPane = new JOptionPane(message, JOptionPane.ERROR_MESSAGE);
+            // Використовуємо SwingUtilities.invokeLater для гарантії виконання в EDT
+            SwingUtilities.invokeLater(() -> {
+                final JOptionPane optionPane = new JOptionPane(message, JOptionPane.ERROR_MESSAGE);
+                final JDialog dialog = optionPane.createDialog(AddEditBouquetDialog.this, "Помилка введення");
 
-            final JDialog dialog = optionPane.createDialog(this, "Помилка введення");
-
-            Timer timer = new Timer(5000, new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    if (dialog.isVisible()) {
-                        dialog.setVisible(false);
-                        dialog.dispose();
+                Timer timer = new Timer(5000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if (dialog.isVisible()) {
+                            dialog.setVisible(false);
+                            dialog.dispose();
+                        }
                     }
-                }
-            });
-            timer.setRepeats(false);
-            timer.start();
+                });
+                timer.setRepeats(false);
+                timer.start();
 
-            dialog.setVisible(true);
+                dialog.setVisible(true);
+            });
         }
     }
 
